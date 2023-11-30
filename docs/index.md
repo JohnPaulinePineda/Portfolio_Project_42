@@ -2,7 +2,7 @@
 # Supervised Learning : Estimating Cancer Rate Group Probabilities Across Countries Using Classification Algorithms With Class Imbalance Treatment
 
 ***
-### John Pauline Pineda <br> <br> *December 5, 2023*
+### John Pauline Pineda <br> <br> *December 1, 2023*
 ***
 
 * [**1. Table of Contents**](#TOC)
@@ -61,6 +61,8 @@
             * [1.3.9.2 Logistic Regression](#1.3.9.2)
         * [1.3.10 Model Selection](#1.3.10) 
         * [1.3.11 Model Presentation](#1.3.11) 
+            * [1.3.11.1 Odds Ratio](#1.3.11.1)
+            * [1.3.11.2 Shapley Additive Explanations](#1.3.11.2)
 * [**2. Summary**](#Summary)   
 * [**3. References**](#References)
 
@@ -68,11 +70,9 @@
 
 # 1. Table of Contents <a class="anchor" id="TOC"></a>
 
-This project implements different predictive modelling procedures for dichotomous categorical responses using various helpful packages in <mark style="background-color: #CCECFF"><b>Python</b></mark>. Models applied in the analysis to predict dichotomous categorical responses included the **Logistic Regression**, **Decision Trees**, **Random Forest** and **Support Vector Machine** algorithms. Remedial procedures on addressing class imbalance including **Class Weighting**, **Synthetic Minority Oversampling Technique** and **Condensed Nearest Neighbors** were similarly considered, as applicable. Ensemble learning using **Stacking** which consolidate many different models types on the same data and using another model to learn how to best combine the predictions was also explored. All results were consolidated in a [<span style="color: #FF0000"><b>Summary</b></span>](#Summary) presented at the end of the document.
-
-[Binary classification learning](https://link.springer.com/book/10.1007/978-1-4614-6849-3?page=1) refers to a predictive modelling problem where only two class labels are predicted for a given sample of input data. These models use the training data set and calculate how to best map instances of input data to the specific class labels. Typically, binary classification tasks involve one class that is the normal state (assigned the class label 0) and another class that is the abnormal state (assigned the class label 1). It is common to structure a binary classification task with a model that predicts a Bernoulli probability distribution for each instance. The Bernoulli distribution is a discrete probability distribution that covers a case where an event will have a binary outcome as either a 0 or 1. For a binary classification, this means that the model predicts a probability of an instance belonging to class 1, or the abnormal state. The algorithms applied in this study attempt to categorize the input data and form dichotomous groups based on their similarities.
-
 ## 1.1 Introduction <a class="anchor" id="1.1"></a>
+
+Age-standardized cancer rates are measures used to compare cancer incidence between countries while accounting for differences in age distribution. They allow for a [more accurate assessment of the relative risk of cancer across populations with diverse demographic and socio-economic characteristics](https://www.ncbi.nlm.nih.gov/books/NBK566196/) - enabling a [more nuanced understanding of the global burden of cancer and facilitating evidence-based public health interventions](https://pubmed.ncbi.nlm.nih.gov/22658655/).
 
 Datasets used for the analysis were separately gathered and consolidated from various sources including: 
 1. Cancer Rates from [World Population Review](https://worldpopulationreview.com/country-rankings/cancer-rates-by-country)
@@ -95,35 +95,49 @@ Subsequent analysis and modelling steps involving data understanding, data prepa
 
 ### 1.1.1 Study Objectives <a class="anchor" id="1.1.1"></a>
 
+**The main objective of the study is to develop an interpretable classification model which could provide robust and reliable estimates of cancer rate group probabilities from an optimal set of observations and predictors, while addressing class imbalance and delivering accurate predictions when applied to new unseen data.**
+
+Specific objectives are given as follows:
+
+* Obtain an optimal subset of observations and predictors by conducting data quality assessment and feature selection, excluding cases or variables noted with irregularities and applying preprocessing operations most suitable for the downstream analysis
+
+* Develop multiple classification models with remedial measures applied to address class imbalance and with optimized hyperparameters through internal resampling validation
+
+* Select the final classification model among candidates based on robust performance estimates
+
+* Evaluate the final model performance and generalization ability through external validation in an independent set
+
+* Conduct a post-hoc exploration of the model results to provide general insights on the importance, contribution and effect of the various predictors to model prediction
+
 ### 1.1.2 Outcome <a class="anchor" id="1.1.2"></a>
 
 The analysis endpoint for the study is described below:
-* <span style="color: #FF0000">CANRAT</span> - Dichotomized category based on age-standardized cancer rates, per 100K population (2022)
+* <span style="color: #FF0000">CANRAT</span> (categorical): **Dichotomized category based on age-standardized cancer rates**, per 100K population (2022)
 
 
 ### 1.1.3 Predictors <a class="anchor" id="1.1.2"></a>
 
 Detailed descriptions for each individual predictor used in the study are provided as follows:
-* <span style="color: #FF0000">GDPPER</span> - GDP per person employed, current US Dollars (2020)
-* <span style="color: #FF0000">URBPOP</span> - Urban population, % of total population (2020)
-* <span style="color: #FF0000">PATRES</span> - Patent applications by residents, total count (2020)
-* <span style="color: #FF0000">RNDGDP</span> - Research and development expenditure, % of GDP (2020)
-* <span style="color: #FF0000">POPGRO</span> - Population growth, annual % (2020)
-* <span style="color: #FF0000">LIFEXP</span> - Life expectancy at birth, total in years (2020)
-* <span style="color: #FF0000">TUBINC</span> - Incidence of tuberculosis, per 100K population (2020)
-* <span style="color: #FF0000">DTHCMD</span> - Cause of death by communicable diseases and maternal, prenatal and nutrition conditions,  % of total (2019)
-* <span style="color: #FF0000">AGRLND</span> - Agricultural land,  % of land area (2020)
-* <span style="color: #FF0000">GHGEMI</span> - Total greenhouse gas emissions, kt of CO2 equivalent (2020)
-* <span style="color: #FF0000">RELOUT</span> - Renewable electricity output, % of total electricity output (2015)
-* <span style="color: #FF0000">METEMI</span> - Methane emissions, kt of CO2 equivalent (2020)
-* <span style="color: #FF0000">FORARE</span> - Forest area, % of land area (2020)
-* <span style="color: #FF0000">CO2EMI</span> - CO2 emissions, metric tons per capita (2020)
-* <span style="color: #FF0000">PM2EXP</span> - PM2.5 air pollution, population exposed to levels exceeding WHO guideline value,  % of total (2017)
-* <span style="color: #FF0000">POPDEN</span> - Population density, people per sq. km of land area (2020)
-* <span style="color: #FF0000">GDPCAP</span> - GDP per capita, current US Dollars (2020)
-* <span style="color: #FF0000">ENRTER</span> - Tertiary school enrollment, % gross (2020)
-* <span style="color: #FF0000">HDICAT</span> - Human development index, ordered category (2020)
-* <span style="color: #FF0000">EPISCO</span> - Environment performance index , score (2022)
+* <span style="color: #FF0000">GDPPER</span> (numeric): **GDP per person employed**, current US Dollars (2020)
+* <span style="color: #FF0000">URBPOP</span> (numeric): **Urban population**, % of total population (2020)
+* <span style="color: #FF0000">PATRES</span> (numeric): **Patent applications by residents**, total count (2020)
+* <span style="color: #FF0000">RNDGDP</span> (numeric): **Research and development expenditure**, % of GDP (2020)
+* <span style="color: #FF0000">POPGRO</span> (numeric): **Population growth**, annual % (2020)
+* <span style="color: #FF0000">LIFEXP</span> (numeric): **Life expectancy at birth**, total in years (2020)
+* <span style="color: #FF0000">TUBINC</span> (numeric): **Incidence of tuberculosis**, per 100K population (2020)
+* <span style="color: #FF0000">DTHCMD</span> (numeric): **Cause of death by communicable diseases and maternal, prenatal and nutrition conditions**,  % of total (2019)
+* <span style="color: #FF0000">AGRLND</span> (numeric): **Agricultural land**,  % of land area (2020)
+* <span style="color: #FF0000">GHGEMI</span> (numeric): **Total greenhouse gas emissions**, kt of CO2 equivalent (2020)
+* <span style="color: #FF0000">RELOUT</span> (numeric): **Renewable electricity output**, % of total electricity output (2015)
+* <span style="color: #FF0000">METEMI</span> (numeric): **Methane emissions**, kt of CO2 equivalent (2020)
+* <span style="color: #FF0000">FORARE</span> (numeric): **Forest area**, % of land area (2020)
+* <span style="color: #FF0000">CO2EMI</span> (numeric): **CO2 emissions**, metric tons per capita (2020)
+* <span style="color: #FF0000">PM2EXP</span> (numeric): **PM2.5 air pollution, population exposed to levels exceeding WHO guideline value**,  % of total (2017)
+* <span style="color: #FF0000">POPDEN</span> (numeric): **Population density**, people per sq. km of land area (2020)
+* <span style="color: #FF0000">GDPCAP</span> (numeric): **GDP per capita**, current US Dollars (2020)
+* <span style="color: #FF0000">ENRTER</span> (numeric): **Tertiary school enrollment**, % gross (2020)
+* <span style="color: #FF0000">HDICAT</span> (categorical): **Human development index**, ordered category (2020)
+* <span style="color: #FF0000">EPISCO</span> (numeric): **Environment performance index** , score (2022)
 
 
 ## 1.2 Methodology <a class="anchor" id="1.2"></a>
@@ -131,11 +145,13 @@ Detailed descriptions for each individual predictor used in the study are provid
 
 ### 1.2.1 Data Assessment <a class="anchor" id="1.2.1"></a>
 
-[Data quality assessment](http://appliedpredictivemodeling.com/) involves profiling and assessing the data to understand its suitability for machine learning tasks. The quality of training data has a huge impact on the efficiency, accuracy and complexity of machine learning tasks. Data remains susceptible to errors or irregularities that may be introduced during collection, aggregation or annotation stage. Issues such as incorrect labels, synonymous categories in a categorical variable or heterogeneity in columns, among others, which might go undetected by standard pre-processing modules in these frameworks can lead to sub-optimal model performance, inaccurate analysis and unreliable decisions.
+Preliminary data used in the study was evaluated and prepared for analysis and modelling using the following methods:
 
-[Data preprocessing](http://appliedpredictivemodeling.com/) involves changing the raw feature vectors into a representation that is more suitable for the downstream modelling and estimation processes, including data cleaning, integration, reduction and transformation. Data cleaning aims to identify and correct errors in the dataset that may negatively impact a predictive model such as removing outliers, replacing missing values, smoothing noisy data, and correcting inconsistent data. Data integration addresses potential issues with redundant and inconsistent data obtained from multiple sources through approaches such as detection of tuple duplication and data conflict. The purpose of data reduction is to have a condensed representation of the data set that is smaller in volume, while maintaining the integrity of the original data set. Data transformation converts the data into the most appropriate form for data modeling.
+[Data Quality Assessment](http://appliedpredictivemodeling.com/) involves profiling and assessing the data to understand its suitability for machine learning tasks. The quality of training data has a huge impact on the efficiency, accuracy and complexity of machine learning tasks. Data remains susceptible to errors or irregularities that may be introduced during collection, aggregation or annotation stage. Issues such as incorrect labels, synonymous categories in a categorical variable or heterogeneity in columns, among others, which might go undetected by standard pre-processing modules in these frameworks can lead to sub-optimal model performance, inaccurate analysis and unreliable decisions.
 
-[Data exploration](http://appliedpredictivemodeling.com/) involves analyzing and investigating data sets to summarize their main characteristics, often employing data visualization methods. It helps determine how best to manipulate data sources to discover patterns, spot anomalies, test a hypothesis, or check assumptions. This process is primarily used to see what data can reveal beyond the formal modeling or hypothesis testing task and provides a better understanding of data set variables and the relationships between them.
+[Data Preprocessing](http://appliedpredictivemodeling.com/) involves changing the raw feature vectors into a representation that is more suitable for the downstream modelling and estimation processes, including data cleaning, integration, reduction and transformation. Data cleaning aims to identify and correct errors in the dataset that may negatively impact a predictive model such as removing outliers, replacing missing values, smoothing noisy data, and correcting inconsistent data. Data integration addresses potential issues with redundant and inconsistent data obtained from multiple sources through approaches such as detection of tuple duplication and data conflict. The purpose of data reduction is to have a condensed representation of the data set that is smaller in volume, while maintaining the integrity of the original data set. Data transformation converts the data into the most appropriate form for data modeling.
+
+[Data Exploration](http://appliedpredictivemodeling.com/) involves analyzing and investigating data sets to summarize their main characteristics, often employing data visualization methods. It helps determine how best to manipulate data sources to discover patterns, spot anomalies, test a hypothesis, or check assumptions. This process is primarily used to see what data can reveal beyond the formal modeling or hypothesis testing task and provides a better understanding of data set variables and the relationships between them.
 
 [Iterative Imputer](https://scikit-learn.org/stable/modules/generated/sklearn.impute.IterativeImputer.html) is based on the [Multivariate Imputation by Chained Equations](https://journals.sagepub.com/doi/10.1177/0962280206074463) (MICE) algorithm - an imputation method based on fully conditional specification, where each incomplete variable is imputed by a separate model. As a sequential regression imputation technique, the algorithm imputes an incomplete column (target column) by generating plausible synthetic values given other columns in the data. Each incomplete column must act as a target column, and has its own specific set of predictors. For predictors that are incomplete themselves, the most recently generated imputations are used to complete the predictors prior to imputation of the target columns. The [Linear Regression](https://link.springer.com/book/10.1007/978-1-4757-3462-1) model was formulated for imputation - which explores the linear relationship between a scalar response and one or more covariates by having the conditional mean of the dependent variable be an affine function of the independent variables. The relationship is modeled through a disturbance term which represents an unobserved random variable that adds noise. The algorithm is typically formulated from the data using the least squares method which seeks to estimate the coefficients by minimizing the squared residual function. The linear equation assigns one scale factor represented by a coefficient to each covariate and an additional coefficient called the intercept or the bias coefficient which gives the line an additional degree of freedom allowing to move up and down a two-dimensional plot.
 
@@ -144,18 +160,28 @@ Detailed descriptions for each individual predictor used in the study are provid
 
 ### 1.2.2 Feature Selection <a class="anchor" id="1.2.1"></a>
 
+Statistical test measures were assessed for the numeric and categorical predictors in the study to determine the most optimal subset of variables for the subsequent modelling process which included the following:
+
 [Pearson’s Correlation Coefficient](https://royalsocietypublishing.org/doi/10.1098/rsta.1896.0007) is a parametric measure of the linear correlation for a pair of features by calculating the ratio between their covariance and the product of their standard deviations. The presence of high absolute correlation values indicate the univariate association between the numeric predictors and the numeric response.
+
+[Two-Sample T-Test Statistic](http://seismo.berkeley.edu/~kirchner/eps_120/Odds_n_ends/Students_original_paper.pdf) is used to determine whether there is a significant difference between the means of two independent groups. It is calculated as the difference between the means of the two groups divided by the standard error of the difference. The test statistic follows a t-distribution with degrees of freedom calculated based on the sample sizes and assumptions about the variances.
+
+[Chi-square Test Statistic](https://www.tandfonline.com/doi/abs/10.1080/14786440009463897) is used to assess whether there is a significant association between two categorical variables. It is calculated by comparing the observed frequencies of the contingency table with the frequencies that would be expected if the variables were independent. The test statistic follows a chi-square distribution, and the degrees of freedom are determined by the number of categories in the variables being analyzed.
 
 
 ### 1.2.3 Model Formulation <a class="anchor" id="1.2.3"></a>
 
+This study implemented both glass-box and black-box classification modelling procedures with simple to complex structures involving moderate to large numbers of model coefficients or mathematical transformations which lacked transparency in terms of the internal processes and weighted factors used in reaching a decision. Models applied in the analysis for predicting the categorical target were the following:
+
 [Logistic Regression](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=360300) models the relationship between the probability of an event (among two outcome levels) by having the log-odds of the event be a linear combination of a set of predictors weighted by their respective parameter estimates. The parameters are estimated via maximum likelihood estimation by testing different values through multiple iterations to optimize for the best fit of log odds. All of these iterations produce the log likelihood function, and logistic regression seeks to maximize this function to find the best parameter estimates. Given the optimal parameters, the conditional probabilities for each observation can be calculated, logged, and summed together to yield a predicted probability.
 
-[Decision trees](https://www.semanticscholar.org/paper/Classification-and-Regression-Trees-Breiman-Friedman/8017699564136f93af21575810d557dba1ee6fc6) create a model that predicts the class label of a sample based on input features. A decision tree consists of nodes that represent decisions or choices, edges which connect nodes and represent the possible outcomes of a decision and leaf (or terminal) nodes which represent the final decision or the predicted class label. The decision-making process involves feature selection (at each internal node, the algorithm decides which feature to split on based on a certain criterion including gini impurity or entropy), splitting criteria (the splitting criteria aim to find the feature and its corresponding threshold that best separates the data into different classes. The goal is to increase homogeneity within each resulting subset), recursive splitting (the process of feature selection and splitting continues recursively, creating a tree structure. The dataset is partitioned at each internal node based on the chosen feature, and the process repeats for each subset) and stopping criteria (the recursion stops when a certain condition is met, known as a stopping criterion. Common stopping criteria include a maximum depth for the tree, a minimum number of samples required to split a node, or a minimum number of samples in a leaf node.)
+[Decision Trees](https://www.semanticscholar.org/paper/Classification-and-Regression-Trees-Breiman-Friedman/8017699564136f93af21575810d557dba1ee6fc6) create a model that predicts the class label of a sample based on input features. A decision tree consists of nodes that represent decisions or choices, edges which connect nodes and represent the possible outcomes of a decision and leaf (or terminal) nodes which represent the final decision or the predicted class label. The decision-making process involves feature selection (at each internal node, the algorithm decides which feature to split on based on a certain criterion including gini impurity or entropy), splitting criteria (the splitting criteria aim to find the feature and its corresponding threshold that best separates the data into different classes. The goal is to increase homogeneity within each resulting subset), recursive splitting (the process of feature selection and splitting continues recursively, creating a tree structure. The dataset is partitioned at each internal node based on the chosen feature, and the process repeats for each subset) and stopping criteria (the recursion stops when a certain condition is met, known as a stopping criterion. Common stopping criteria include a maximum depth for the tree, a minimum number of samples required to split a node, or a minimum number of samples in a leaf node.)
 
 [Random Forest](https://link.springer.com/article/10.1023/A:1010933404324) is an ensemble learning method made up of a large set of small decision trees called estimators, with each producing its own prediction. The random forest model aggregates the predictions of the estimators to produce a more accurate prediction. The algorithm involves bootstrap aggregating (where smaller subsets of the training data are repeatedly subsampled with replacement), random subspacing (where a subset of features are sampled and used to train each individual estimator), estimator training (where unpruned decision trees are formulated for each estimator) and inference by aggregating the predictions of all estimators.
 
 [Support Vector Machine](https://dl.acm.org/doi/10.1145/130385.130401) plots each observation in an N-dimensional space corresponding to the number of features in the data set and finds a hyperplane that maximally separates the different classes by a maximally large margin (which is defined as the distance between the hyperplane and the closest data points from each class). The algorithm applies kernel transformation by mapping non-linearly separable data using the similarities between the points in a high-dimensional feature space for improved discrimination.
+
+Different versions of the individual models were formulated following remedial measures to address class imbalance described as follows:
 
 [Hyperparameter Tuning](https://link.springer.com/book/10.1007/978-1-4614-6849-3?page=1) is an iterative process that involves experimenting with different hyperparameter combinations, evaluating the model's performance, and refining the hyperparameter values to achieve the best possible performance on new, unseen data - aimed at building effective and well-generalizing machine learning models. A model's performance depends not only on the learned parameters (weights) during training but also on hyperparameters, which are external configuration settings that cannot be learned from the data. 
 
@@ -165,17 +191,41 @@ Detailed descriptions for each individual predictor used in the study are provid
 
 [Condensed Nearest Neighbors](https://ieeexplore.ieee.org/document/1054155) is a prototype selection algorithm that aims to select a subset of instances from the original dataset, discarding redundant and less informative instances. The algorithm works by iteratively adding instances to the subset, starting with an empty set. At each iteration, an instance is added if it is not correctly classified by the current subset. The decision to add or discard an instance is based on its performance on a k-nearest neighbors classifier. If an instance is misclassified by the current subset's k-nearest neighbors, it is added to the subset. The process is repeated until no new instances are added to the subset. The resulting subset is a condensed representation of the dataset that retains the essential information needed for classification.
 
+An additional iteration of the modelling process applying an ensemble structure was carried out for comparison:
+
 [Model Stacking](https://www.manning.com/books/ensemble-methods-for-machine-learning) - also known as stacked generalization, is an ensemble approach which involves creating a variety of base learners and using them to create intermediate predictions, one for each learned model. A meta-model is incorporated that gains knowledge of the same target from intermediate predictions. Unlike bagging, in stacking, the models are typically different (e.g. not all decision trees) and fit on the same dataset (e.g. instead of samples of the training dataset). Unlike boosting, in stacking, a single model is used to learn how to best combine the predictions from the contributing models (e.g. instead of a sequence of models that correct the predictions of prior models). Stacking is appropriate when the predictions made by the base learners or the errors in predictions made by the models have minimal correlation. Achieving an improvement in performance is dependent upon the choice of base learners and whether they are sufficiently skillful in their predictions.
 
 
 ### 1.2.4 Model Hyperparameter Tuning <a class="anchor" id="1.2.4"></a>
 
+The optimal combination of hyperparameter values which maximized the performance of the various classification models in the study used the following hyperparameter tuning strategy:
+
+[K-Fold Cross-Validation](http://appliedpredictivemodeling.com/) involves dividing the training set after a random shuffle into a user-defined K number of smaller non-overlapping sets called folds. Each unique fold is assigned as the hold-out test data to assess the model trained from the data set collected from all the remaining K-1 folds. The evaluation score is retained but the model is discarded. The process is recursively performed resulting to a total of K fitted models and evaluated on the K hold-out test sets. All K-computed performance measures reported from the process are then averaged to represent the estimated performance of the model. This approach can be computationally expensive and may be highly dependent on how the data was randomly assigned to their respective folds, but does not waste too much data which is a major advantage in problems where the number of samples is very small.
+
 
 ### 1.2.5 Model Performance Evaluation <a class="anchor" id="1.2.5"></a>
 
+The predictive performance of the formulated classification models in the study were compared and evaluated using the following metrics:
+
+[Accuracy](https://link.springer.com/book/10.1007/978-1-4614-6849-3?page=1) is the ratio of correctly predicted instances to the total instances. It provides an overall measure of model performance which is easy to understand and interpret, but can be misleading in imbalanced datasets when one class dominates.
+
+[Precision](https://link.springer.com/book/10.1007/978-1-4614-6849-3?page=1) is the ratio of correctly predicted positive observations to the total predicted positives. It is useful when the cost of false positives is high but does not consider false negatives, so might not be suitable for imbalanced datasets.
+
+[Recall](https://link.springer.com/book/10.1007/978-1-4614-6849-3?page=1) is the ratio of correctly predicted positive observations to all the actual positives. It is useful when the cost of false negatives is high but does not consider false positives, so might not be suitable for imbalanced datasets.
+
+[F1 Score](https://link.springer.com/book/10.1007/978-1-4614-6849-3?page=1) is the harmonic mean of precision and recall. It balances precision and recall, providing a single metric for performance evaluation which is suitable for imbalanced datasets.Although, it might not be the best metric in situations where precision or recall is more critical.
+
+[AUROC](https://link.springer.com/book/10.1007/978-1-4614-6849-3?page=1) measures the area under the receiver operating characteristic curve, which illustrates the trade-off between true positive rate (sensitivity) and false positive rate at various classification thresholds. It provides a comprehensive evaluation of the model's ability to discriminate between classes and is robust to imbalanced datasets. Compared to other metrics, it may not be as directly interpretable as well as not being sensitive to class distribution changes.
 
 
 ### 1.2.6 Model Presentation <a class="anchor" id="1.2.1"></a>
+
+Model presentation was conducted post-hoc and focused on both model-specific and model-agnostic techniques which did not consider any assumptions about the model structures. These methods were described as follows:
+
+[Odds Ratios](https://link.springer.com/book/10.1007/978-1-4614-6849-3?page=1) aid in interpreting the relationship between the independent variables and the probability of an event occurring in a logistic regression model by quantifying the change in odds associated with a one-unit change in the independent variable. An estimated value greater than one indicates that the odds of the event are expected to increase by a factor equal to the odds ratio for a one-unit increase in the independent variable. While a an estimated value less than one indicates that The odds of the event are expected to decrease by the reciprocal of the odds ratio for a one-unit increase in the independent variable.
+
+[Shapley Additive Explanations](https://dl.acm.org/doi/10.5555/1756006.1756007) are based on Shapley values developed in the cooperative game theory. The process involves explaining a prediction by assuming that each explanatory variable for an instance is a player in a game where the prediction is the payout. The game is the prediction task for a single instance of the data set. The gain is the actual prediction for this instance minus the average prediction for all instances. The players are the explanatory variable values of the instance that collaborate to receive the gain (predict a certain value). The determined value is the average marginal contribution of an explanatory variable across all possible coalitions.
+
 
 ## 1.3. Results <a class="anchor" id="1.3"></a>
 
@@ -11281,19 +11331,9 @@ fig.colorbar(disp.im_, ax=axes)
 plt.show()
 ```
 
-    Exception ignored in: <function WeakMethod.__new__.<locals>._cb at 0x0000026F7A4A0C20>
-    Traceback (most recent call last):
-      File "C:\Users\anaconda3\Lib\weakref.py", line 60, in _cb
-        callback(self)
-      File "C:\Users\anaconda3\Lib\site-packages\matplotlib\cbook\__init__.py", line 254, in _remove_proxy
-        del self.callbacks[signal][cid]
-            ~~~~~~~~~~~~~~^^^^^^^^
-    KeyError: 'changed'
-    
-
 
     
-![png](output_306_1.png)
+![png](output_306_0.png)
     
 
 
@@ -13335,7 +13375,18 @@ plt.show()
 
 ### 1.3.11 Model Presentation <a class="anchor" id="1.3.11"></a>
 
-#### 1.3.11.1 Shapley Additive Explanations <a class="anchor" id="1.3.11.1"></a>
+#### 1.3.11.1 Odds Ratios <a class="anchor" id="1.3.11.1"></a>
+
+1. The most important predictors in the model ranked by their Absolute Coefficient Value and Estimated Odds Ratio for a <span style="color: #FF0000">CANRAT=HIGH</span> Prediction were listed as follows. 
+    * <span style="color: #FF0000">EPISCO</span>: Model.Coefficient=+1.136, Odds.Ratio=3.114 
+    * <span style="color: #FF0000">GDPCAP</span>: Model.Coefficient=+0.596, Odds.Ratio=1.815 
+    * <span style="color: #FF0000">DTHCMD</span>: Model.Coefficient=-0.534, Odds.Ratio=0.586 
+    * <span style="color: #FF0000">LIFEXP</span>: Model.Coefficient=+0.473, Odds.Ratio=1.604   
+    * <span style="color: #FF0000">TUBINC</span>: Model.Coefficient=-0.412, Odds.Ratio=0.662 
+    * <span style="color: #FF0000">HDICAT_VH</span>: Model.Coefficient=+0.268, Odds.Ratio=1.308 
+    * <span style="color: #FF0000">CO2EMI</span>: Model.Coefficient=-0.151, Odds.Ratio=0.860 
+    * <span style="color: #FF0000">URBPOP</span>: Model.Coefficient=+0.094, Odds.Ratio=1.098 
+    
 
 
 ```python
@@ -13454,6 +13505,19 @@ display(final_model_coefficient)
 </div>
 
 
+#### 1.3.11.2 Shapley Additive Explanations <a class="anchor" id="1.3.11.2"></a>
+
+1. The most important predictors in the model ranked by their Mean Shap Value and Feature Impact to <span style="color: #FF0000">CANRAT=HIGH</span> Prediction were listed as follows. 
+    * <span style="color: #FF0000">EPISCO</span>: Mean.Shap.Value=1.00, Feature.Impact=+
+    * <span style="color: #FF0000">GDPCAP</span>: Model.Coefficient=0.48, Odds.Ratio=+
+    * <span style="color: #FF0000">DTHCMD</span>: Model.Coefficient=0.46, Odds.Ratio=-
+    * <span style="color: #FF0000">LIFEXP</span>: Model.Coefficient=0.38, Odds.Ratio=+   
+    * <span style="color: #FF0000">TUBINC</span>: Model.Coefficient=0.36, Odds.Ratio=- 
+    * <span style="color: #FF0000">HDICAT_VH</span>: Model.Coefficient=0.13, Odds.Ratio=+ 
+    * <span style="color: #FF0000">CO2EMI</span>: Model.Coefficient=0.13, Odds.Ratio=- 
+    * <span style="color: #FF0000">URBPOP</span>: Model.Coefficient=0.08, Odds.Ratio=+ 
+    
+
 
 ```python
 ##################################
@@ -13496,7 +13560,7 @@ plt.show()
 
 
     
-![png](output_343_0.png)
+![png](output_344_0.png)
     
 
 
@@ -13514,7 +13578,7 @@ plt.show()
 
 
     
-![png](output_344_0.png)
+![png](output_345_0.png)
     
 
 
@@ -13533,7 +13597,7 @@ plt.show()
 
 
     
-![png](output_345_0.png)
+![png](output_346_0.png)
     
 
 
@@ -13552,7 +13616,7 @@ plt.show()
 
 
     
-![png](output_346_0.png)
+![png](output_347_0.png)
     
 
 
@@ -13569,7 +13633,7 @@ shap.plots.heatmap(final_model_train_shap_values)
 
 
     
-![png](output_347_0.png)
+![png](output_348_0.png)
     
 
 
@@ -13586,7 +13650,7 @@ shap.plots.heatmap(final_model_test_shap_values)
 
 
     
-![png](output_348_0.png)
+![png](output_349_0.png)
     
 
 
@@ -13603,7 +13667,7 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_tra
 
 
     
-![png](output_349_0.png)
+![png](output_350_0.png)
     
 
 
@@ -13614,7 +13678,7 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_tra
 
 
     
-![png](output_350_0.png)
+![png](output_351_0.png)
     
 
 
@@ -13625,7 +13689,7 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_tra
 
 
     
-![png](output_351_0.png)
+![png](output_352_0.png)
     
 
 
@@ -13636,7 +13700,7 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_tra
 
 
     
-![png](output_352_0.png)
+![png](output_353_0.png)
     
 
 
@@ -13647,7 +13711,7 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_tra
 
 
     
-![png](output_353_0.png)
+![png](output_354_0.png)
     
 
 
@@ -13658,7 +13722,7 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_tra
 
 
     
-![png](output_354_0.png)
+![png](output_355_0.png)
     
 
 
@@ -13669,7 +13733,7 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_tra
 
 
     
-![png](output_355_0.png)
+![png](output_356_0.png)
     
 
 
@@ -13686,7 +13750,7 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 
 
     
-![png](output_356_0.png)
+![png](output_357_0.png)
     
 
 
@@ -13697,7 +13761,7 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 
 
     
-![png](output_357_0.png)
+![png](output_358_0.png)
     
 
 
@@ -13708,7 +13772,7 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 
 
     
-![png](output_358_0.png)
+![png](output_359_0.png)
     
 
 
@@ -13719,7 +13783,7 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 
 
     
-![png](output_359_0.png)
+![png](output_360_0.png)
     
 
 
@@ -13730,7 +13794,7 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 
 
     
-![png](output_360_0.png)
+![png](output_361_0.png)
     
 
 
@@ -13741,7 +13805,7 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 
 
     
-![png](output_361_0.png)
+![png](output_362_0.png)
     
 
 
@@ -13752,11 +13816,32 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 
 
     
-![png](output_362_0.png)
+![png](output_363_0.png)
     
 
 
 # 2. Summary <a class="anchor" id="Summary"></a>
+
+
+**A logistic regression model applied with L2 regularization and class weights provided a set of robust and reliable probability estimates for countries belonging to the high cancer rate group – predominantly characterized by factors related to social development, economic, healthcare delivery and environmental factors. The key drivers identified for high cancer rate levels ranked by feature importance with their conditioned effects indicated were given as follows:**
+* **Environmental protection index (+)**
+* **GDP per capita (+)**
+* **Death by communicable disease (-)**
+* **Life expectancy (+)**
+* **Tuberculosis incidence (-)**
+* **Human development index (+)**
+* **CO2 emission (-)**
+* **Urban population (+)**
+
+**Overall, industrialized countries reported higher cancer rates. While progressiveness may not inherently imply more cancer prevalence, these countries potentially had better socio-economic policies and healthcare infrastructure to support cancer screening and diagnosis, with shifting demographics including an aging population with increased disease incidence trends.**
+
+* From an initial dataset comprised of 177 observations and 21 predictors, an optimal subset of **163 observations and 8 predictors** representing social development, economic, healthcare delivery and environmental factors were determined after conducting data quality assessment and feature selection, excluding cases or variables noted with irregularities and applying preprocessing operations most suitable for the downstream analysis.
+
+* Multiple classification modelling algorithms with various hyperparameter combinations were formulated using **Logistic Regression**, **Decision Tree**, **Random Forest** and **Support Vector Machine**. Class imbalance treatment including **Class Weights**, **Upsampling with Synthetic Minority Oversampling Technique (SMOTE)** and **Downsampling with Condensed Nearest Neighbors (CNN)**. **Ensemble Learning Using Model Stacking** was additionally explored. The best model with optimized hyperparameters from each algorithm were determined through internal resampling validation using **5-Fold Cross Validation** with **F1 Score** used as the primary performance metric among **Accuracy**, **Precision**, **Recall** and **Area Under the Receiver Operating Characterisng Curve (AUROC)**. All candidate models were compared based on internal and external validation performance.
+
+* The final model selected among candidates used **Logistic Regression Model** defined by an **L2 Regularization** and **Class Weights** with optimal hyperparameters: **weights associated with classes (class_weight={0;LOW: 0.25, 1;HIGH: 0.75})**, **inverse of regularization strength (C=1)**, **regularization (penalty=L2)**, **algorithm used in the optimization problem (solver=liblinear)** and **maximum number of iterations taken for the solvers to converge (max_iter=500)**. This model demonstrated the best externally validated F1 Score, AUROC, Precision, Recall and Accuracy (**F1 Score=0.88, AUROC=0.93, Precision=0.85, Recall=0.92, Accuracy=0.94**) with no excessive overfitting comparing the external and apparent validation metrics .
+
+* Post-hoc exploration of the model results involved model-specific (**Odds Ratios**) and model-agnostic (**Shapley Additive Explanations**) methods. Both methods were consistent in ranking **Environmental protection index**, **GDP per capita**, **Death by communicable disease**, **Life expectancy**, **Tuberculosis incidence**, **Human development index**, **CO2 emission** and **Urban population** as the most important features by importance. These results helped provide insights on the significance, contribution and effect of the various predictors to model prediction.
 
 
 ![Cancer_Rate_Category_Summary_1.png](attachment:516a0e4e-d0b2-443b-90fd-63244c15ebf5.png)
@@ -13842,6 +13927,8 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 * **[Publication]** [Multiple Imputation of Discrete and Continuous Data by Fully Conditional Specification](https://journals.sagepub.com/doi/10.1177/0962280206074463) by Stef van Buuren (Statistical Methods in Medical Research)
 * **[Publication]** [Mathematical Contributions to the Theory of Evolution: Regression, Heredity and Panmixia](https://royalsocietypublishing.org/doi/10.1098/rsta.1896.0007) by Karl Pearson (Royal Society)
 * **[Publication]** [A New Family of Power Transformations to Improve Normality or Symmetry](https://academic.oup.com/biomet/article-abstract/87/4/954/232908?redirectedFrom=fulltext&login=false) by In-Kwon Yeo and Richard Johnson (Biometrika)
+* **[Publication]** [The Probable Error of the Mean](http://seismo.berkeley.edu/~kirchner/eps_120/Odds_n_ends/Students_original_paper.pdf) by Student (Biometrika)
+* **[Publication]** [On the Criterion That a Given System of Deviations from the Probable in the Case of a Correlated System of Variables is Such That It can Be Reasonably Supposed to Have Arisen From Random Sampling](https://www.tandfonline.com/doi/abs/10.1080/14786440009463897) by Karl Pearson (Philosophical Magazine)
 * **[Publication]** [The Origins of Logistic Regression](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=360300) by JS Cramer (Econometrics eJournal)
 * **[Publication]** [Classification and Regression Trees](https://www.semanticscholar.org/paper/Classification-and-Regression-Trees-Breiman-Friedman/8017699564136f93af21575810d557dba1ee6fc6) by Leo Breiman, Jerome Friedman, Richard Olshen and Charles Stone (Computer Science)
 * **[Publication]** [Random Forest](https://link.springer.com/article/10.1023/A:1010933404324) by Leo Breiman (Machine Learning)
