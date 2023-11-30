@@ -13509,13 +13509,13 @@ display(final_model_coefficient)
 
 1. The most important predictors in the model ranked by their Mean Shap Value and Feature Impact to <span style="color: #FF0000">CANRAT=HIGH</span> Prediction were listed as follows. 
     * <span style="color: #FF0000">EPISCO</span>: Mean.Shap.Value=1.00, Feature.Impact=Positive
-    * <span style="color: #FF0000">GDPCAP</span>: Model.Coefficient=0.48, Odds.Ratio=Positive
-    * <span style="color: #FF0000">DTHCMD</span>: Model.Coefficient=0.46, Odds.Ratio=Negative
-    * <span style="color: #FF0000">LIFEXP</span>: Model.Coefficient=0.38, Odds.Ratio=Positive   
-    * <span style="color: #FF0000">TUBINC</span>: Model.Coefficient=0.36, Odds.Ratio=Negative 
-    * <span style="color: #FF0000">HDICAT_VH</span>: Model.Coefficient=0.13, Odds.Ratio=Positive 
-    * <span style="color: #FF0000">CO2EMI</span>: Model.Coefficient=0.13, Odds.Ratio=Negative 
-    * <span style="color: #FF0000">URBPOP</span>: Model.Coefficient=0.08, Odds.Ratio=Positive
+    * <span style="color: #FF0000">GDPCAP</span>: Model.Coefficient=0.48, Feature.Impact=Positive
+    * <span style="color: #FF0000">DTHCMD</span>: Model.Coefficient=0.46, Feature.Impact=Negative
+    * <span style="color: #FF0000">LIFEXP</span>: Model.Coefficient=0.38, Feature.Impact=Positive   
+    * <span style="color: #FF0000">TUBINC</span>: Model.Coefficient=0.36, Feature.Impact=Negative 
+    * <span style="color: #FF0000">HDICAT_VH</span>: Model.Coefficient=0.13, Feature.Impact=Positive 
+    * <span style="color: #FF0000">CO2EMI</span>: Model.Coefficient=0.13, Feature.Impact=Negative 
+    * <span style="color: #FF0000">URBPOP</span>: Model.Coefficient=0.08, Feature.Impact=Positive
     
 
 
@@ -13850,9 +13850,9 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 
 ![Cancer_Rate_Category_Summary_3.png](attachment:4868d881-8564-4c15-8167-87dba30665be.png)
 
-![Cancer_Rate_Category_Summary_4.png](attachment:67ac6031-106b-4816-ad61-d1be36f92d7f.png)
+![Cancer_Rate_Category_Summary_4.png](attachment:7a2003de-6f76-4cce-bd95-5c2b56603336.png)
 
-![Cancer_Rate_Category_Summary_5.png](attachment:dfb5e8e3-e0a2-478f-a94d-b9b23fc8a841.png)
+![Cancer_Rate_Category_Summary_5.png](attachment:226c5340-56b7-4ac0-9cf4-3d560cb6fcf5.png)
 
 ![Cancer_Rate_Category_Summary_6.png](attachment:b1580976-c523-46ae-be67-5809a07c2e03.png)
 
