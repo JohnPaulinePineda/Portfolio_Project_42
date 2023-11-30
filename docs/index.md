@@ -13508,14 +13508,14 @@ display(final_model_coefficient)
 #### 1.3.11.2 Shapley Additive Explanations <a class="anchor" id="1.3.11.2"></a>
 
 1. The most important predictors in the model ranked by their Mean Shap Value and Feature Impact to <span style="color: #FF0000">CANRAT=HIGH</span> Prediction were listed as follows. 
-    * <span style="color: #FF0000">EPISCO</span>: Mean.Shap.Value=1.00, Feature.Impact=+
-    * <span style="color: #FF0000">GDPCAP</span>: Model.Coefficient=0.48, Odds.Ratio=+
-    * <span style="color: #FF0000">DTHCMD</span>: Model.Coefficient=0.46, Odds.Ratio=-
-    * <span style="color: #FF0000">LIFEXP</span>: Model.Coefficient=0.38, Odds.Ratio=+   
-    * <span style="color: #FF0000">TUBINC</span>: Model.Coefficient=0.36, Odds.Ratio=- 
-    * <span style="color: #FF0000">HDICAT_VH</span>: Model.Coefficient=0.13, Odds.Ratio=+ 
-    * <span style="color: #FF0000">CO2EMI</span>: Model.Coefficient=0.13, Odds.Ratio=- 
-    * <span style="color: #FF0000">URBPOP</span>: Model.Coefficient=0.08, Odds.Ratio=+ 
+    * <span style="color: #FF0000">EPISCO</span>: Mean.Shap.Value=1.00, Feature.Impact=Positive
+    * <span style="color: #FF0000">GDPCAP</span>: Model.Coefficient=0.48, Odds.Ratio=Positive
+    * <span style="color: #FF0000">DTHCMD</span>: Model.Coefficient=0.46, Odds.Ratio=Negative
+    * <span style="color: #FF0000">LIFEXP</span>: Model.Coefficient=0.38, Odds.Ratio=Positive   
+    * <span style="color: #FF0000">TUBINC</span>: Model.Coefficient=0.36, Odds.Ratio=Negative 
+    * <span style="color: #FF0000">HDICAT_VH</span>: Model.Coefficient=0.13, Odds.Ratio=Positive 
+    * <span style="color: #FF0000">CO2EMI</span>: Model.Coefficient=0.13, Odds.Ratio=Negative 
+    * <span style="color: #FF0000">URBPOP</span>: Model.Coefficient=0.08, Odds.Ratio=Positive
     
 
 
@@ -13837,7 +13837,7 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 
 * From an initial dataset comprised of 177 observations and 21 predictors, an optimal subset of **163 observations and 8 predictors** representing social development, economic, healthcare delivery and environmental factors were determined after conducting data quality assessment and feature selection, excluding cases or variables noted with irregularities and applying preprocessing operations most suitable for the downstream analysis.
 
-* Multiple classification modelling algorithms with various hyperparameter combinations were formulated using **Logistic Regression**, **Decision Tree**, **Random Forest** and **Support Vector Machine**. Class imbalance treatment including **Class Weights**, **Upsampling with Synthetic Minority Oversampling Technique (SMOTE)** and **Downsampling with Condensed Nearest Neighbors (CNN)**. **Ensemble Learning Using Model Stacking** was additionally explored. The best model with optimized hyperparameters from each algorithm were determined through internal resampling validation using **5-Fold Cross Validation** with **F1 Score** used as the primary performance metric among **Accuracy**, **Precision**, **Recall** and **Area Under the Receiver Operating Characterisng Curve (AUROC)**. All candidate models were compared based on internal and external validation performance.
+* Multiple classification modelling algorithms with various hyperparameter combinations were formulated using **Logistic Regression**, **Decision Tree**, **Random Forest** and **Support Vector Machine**. Class imbalance treatment including **Class Weights**, **Upsampling with Synthetic Minority Oversampling Technique (SMOTE)** and **Downsampling with Condensed Nearest Neighbors (CNN)** were implemented. **Ensemble Learning Using Model Stacking** was additionally explored. The best model with optimized hyperparameters from each algorithm were determined through internal resampling validation using **5-Fold Cross Validation** with **F1 Score** used as the primary performance metric among **Accuracy**, **Precision**, **Recall** and **Area Under the Receiver Operating Characterisng Curve (AUROC)**. All candidate models were compared based on internal and external validation performance.
 
 * The final model selected among candidates used **Logistic Regression Model** defined by an **L2 Regularization** and **Class Weights** with optimal hyperparameters: **weights associated with classes (class_weight={0;LOW: 0.25, 1;HIGH: 0.75})**, **inverse of regularization strength (C=1)**, **regularization (penalty=L2)**, **algorithm used in the optimization problem (solver=liblinear)** and **maximum number of iterations taken for the solvers to converge (max_iter=500)**. This model demonstrated the best externally validated F1 Score, AUROC, Precision, Recall and Accuracy (**F1 Score=0.88, AUROC=0.93, Precision=0.85, Recall=0.92, Accuracy=0.94**) with no excessive overfitting comparing the external and apparent validation metrics .
 
