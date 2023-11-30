@@ -72,7 +72,7 @@ This project implements different predictive modelling procedures for dichotomou
 
 [Binary classification learning](https://link.springer.com/book/10.1007/978-1-4614-6849-3?page=1) refers to a predictive modelling problem where only two class labels are predicted for a given sample of input data. These models use the training data set and calculate how to best map instances of input data to the specific class labels. Typically, binary classification tasks involve one class that is the normal state (assigned the class label 0) and another class that is the abnormal state (assigned the class label 1). It is common to structure a binary classification task with a model that predicts a Bernoulli probability distribution for each instance. The Bernoulli distribution is a discrete probability distribution that covers a case where an event will have a binary outcome as either a 0 or 1. For a binary classification, this means that the model predicts a probability of an instance belonging to class 1, or the abnormal state. The algorithms applied in this study attempt to categorize the input data and form dichotomous groups based on their similarities.
 
-## 1.1. Introduction <a class="anchor" id="1.1"></a>
+## 1.1 Introduction <a class="anchor" id="1.1"></a>
 
 Datasets used for the analysis were separately gathered and consolidated from various sources including: 
 1. Cancer Rates from [World Population Review](https://worldpopulationreview.com/country-rankings/cancer-rates-by-country)
@@ -93,15 +93,15 @@ This study hypothesized that various global development indicators and indices i
 
 Subsequent analysis and modelling steps involving data understanding, data preparation, data exploration, model development, model validation and model presentation were individually detailed below, with all the results consolidated in a [<span style="color: #FF0000"><b>Summary</b></span>](#Summary) provided at the end of the document.
 
-### 1.1.1. Study Objectives <a class="anchor" id="1.1.1"></a>
+### 1.1.1 Study Objectives <a class="anchor" id="1.1.1"></a>
 
-### 1.1.2. Outcome <a class="anchor" id="1.1.2"></a>
+### 1.1.2 Outcome <a class="anchor" id="1.1.2"></a>
 
 The analysis endpoint for the study is described below:
 * <span style="color: #FF0000">CANRAT</span> - Dichotomized category based on age-standardized cancer rates, per 100K population (2022)
 
 
-### 1.1.3. Predictors <a class="anchor" id="1.1.2"></a>
+### 1.1.3 Predictors <a class="anchor" id="1.1.2"></a>
 
 Detailed descriptions for each individual predictor used in the study are provided as follows:
 * <span style="color: #FF0000">GDPPER</span> - GDP per person employed, current US Dollars (2020)
@@ -126,16 +126,56 @@ Detailed descriptions for each individual predictor used in the study are provid
 * <span style="color: #FF0000">EPISCO</span> - Environment performance index , score (2022)
 
 
-## 1.1. Data Background <a class="anchor" id="1.1"></a>
+## 1.2 Methodology <a class="anchor" id="1.2"></a>
+
+
+### 1.2.1 Data Assessment <a class="anchor" id="1.2.1"></a>
+
+[Data quality assessment](http://appliedpredictivemodeling.com/) involves profiling and assessing the data to understand its suitability for machine learning tasks. The quality of training data has a huge impact on the efficiency, accuracy and complexity of machine learning tasks. Data remains susceptible to errors or irregularities that may be introduced during collection, aggregation or annotation stage. Issues such as incorrect labels, synonymous categories in a categorical variable or heterogeneity in columns, among others, which might go undetected by standard pre-processing modules in these frameworks can lead to sub-optimal model performance, inaccurate analysis and unreliable decisions.
+
+[Data preprocessing](http://appliedpredictivemodeling.com/) involves changing the raw feature vectors into a representation that is more suitable for the downstream modelling and estimation processes, including data cleaning, integration, reduction and transformation. Data cleaning aims to identify and correct errors in the dataset that may negatively impact a predictive model such as removing outliers, replacing missing values, smoothing noisy data, and correcting inconsistent data. Data integration addresses potential issues with redundant and inconsistent data obtained from multiple sources through approaches such as detection of tuple duplication and data conflict. The purpose of data reduction is to have a condensed representation of the data set that is smaller in volume, while maintaining the integrity of the original data set. Data transformation converts the data into the most appropriate form for data modeling.
+
+[Data exploration](http://appliedpredictivemodeling.com/) involves analyzing and investigating data sets to summarize their main characteristics, often employing data visualization methods. It helps determine how best to manipulate data sources to discover patterns, spot anomalies, test a hypothesis, or check assumptions. This process is primarily used to see what data can reveal beyond the formal modeling or hypothesis testing task and provides a better understanding of data set variables and the relationships between them.
+
+[Iterative Imputer](https://scikit-learn.org/stable/modules/generated/sklearn.impute.IterativeImputer.html) is based on the [Multivariate Imputation by Chained Equations](https://journals.sagepub.com/doi/10.1177/0962280206074463) (MICE) algorithm - an imputation method based on fully conditional specification, where each incomplete variable is imputed by a separate model. As a sequential regression imputation technique, the algorithm imputes an incomplete column (target column) by generating plausible synthetic values given other columns in the data. Each incomplete column must act as a target column, and has its own specific set of predictors. For predictors that are incomplete themselves, the most recently generated imputations are used to complete the predictors prior to imputation of the target columns. The [Linear Regression](https://link.springer.com/book/10.1007/978-1-4757-3462-1) model was formulated for imputation - which explores the linear relationship between a scalar response and one or more covariates by having the conditional mean of the dependent variable be an affine function of the independent variables. The relationship is modeled through a disturbance term which represents an unobserved random variable that adds noise. The algorithm is typically formulated from the data using the least squares method which seeks to estimate the coefficients by minimizing the squared residual function. The linear equation assigns one scale factor represented by a coefficient to each covariate and an additional coefficient called the intercept or the bias coefficient which gives the line an additional degree of freedom allowing to move up and down a two-dimensional plot.
+
+[Yeo-Johnson Transformation](https://academic.oup.com/biomet/article-abstract/87/4/954/232908?redirectedFrom=fulltext&login=false) applies a new family of distributions that can be used without restrictions, extending many of the good properties of the Box-Cox power family. Similar to the Box-Cox transformation, the method also estimates the optimal value of lambda but has the ability to transform both positive and negative values by inflating low variance data and deflating high variance data to create a more uniform data set. While there are no restrictions in terms of the applicable values, the interpretability of the transformed values is more diminished as compared to the other methods.
+
+
+### 1.2.2 Feature Selection <a class="anchor" id="1.2.1"></a>
+
+[Pearson’s Correlation Coefficient](https://royalsocietypublishing.org/doi/10.1098/rsta.1896.0007) is a parametric measure of the linear correlation for a pair of features by calculating the ratio between their covariance and the product of their standard deviations. The presence of high absolute correlation values indicate the univariate association between the numeric predictors and the numeric response.
+
+
+### 1.2.3 Model Formulation <a class="anchor" id="1.2.3"></a>
+
+[Logistic Regression](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=360300) models the relationship between the probability of an event (among two outcome levels) by having the log-odds of the event be a linear combination of a set of predictors weighted by their respective parameter estimates. The parameters are estimated via maximum likelihood estimation by testing different values through multiple iterations to optimize for the best fit of log odds. All of these iterations produce the log likelihood function, and logistic regression seeks to maximize this function to find the best parameter estimates. Given the optimal parameters, the conditional probabilities for each observation can be calculated, logged, and summed together to yield a predicted probability.
+
+[Decision trees](https://www.semanticscholar.org/paper/Classification-and-Regression-Trees-Breiman-Friedman/8017699564136f93af21575810d557dba1ee6fc6) create a model that predicts the class label of a sample based on input features. A decision tree consists of nodes that represent decisions or choices, edges which connect nodes and represent the possible outcomes of a decision and leaf (or terminal) nodes which represent the final decision or the predicted class label. The decision-making process involves feature selection (at each internal node, the algorithm decides which feature to split on based on a certain criterion including gini impurity or entropy), splitting criteria (the splitting criteria aim to find the feature and its corresponding threshold that best separates the data into different classes. The goal is to increase homogeneity within each resulting subset), recursive splitting (the process of feature selection and splitting continues recursively, creating a tree structure. The dataset is partitioned at each internal node based on the chosen feature, and the process repeats for each subset) and stopping criteria (the recursion stops when a certain condition is met, known as a stopping criterion. Common stopping criteria include a maximum depth for the tree, a minimum number of samples required to split a node, or a minimum number of samples in a leaf node.)
+
+[Random Forest](https://link.springer.com/article/10.1023/A:1010933404324) is an ensemble learning method made up of a large set of small decision trees called estimators, with each producing its own prediction. The random forest model aggregates the predictions of the estimators to produce a more accurate prediction. The algorithm involves bootstrap aggregating (where smaller subsets of the training data are repeatedly subsampled with replacement), random subspacing (where a subset of features are sampled and used to train each individual estimator), estimator training (where unpruned decision trees are formulated for each estimator) and inference by aggregating the predictions of all estimators.
+
+[Support Vector Machine](https://dl.acm.org/doi/10.1145/130385.130401) plots each observation in an N-dimensional space corresponding to the number of features in the data set and finds a hyperplane that maximally separates the different classes by a maximally large margin (which is defined as the distance between the hyperplane and the closest data points from each class). The algorithm applies kernel transformation by mapping non-linearly separable data using the similarities between the points in a high-dimensional feature space for improved discrimination.
+
+[Hyperparameter Tuning](https://link.springer.com/book/10.1007/978-1-4614-6849-3?page=1) is an iterative process that involves experimenting with different hyperparameter combinations, evaluating the model's performance, and refining the hyperparameter values to achieve the best possible performance on new, unseen data - aimed at building effective and well-generalizing machine learning models. A model's performance depends not only on the learned parameters (weights) during training but also on hyperparameters, which are external configuration settings that cannot be learned from the data. 
+
+[Class Weights](https://link.springer.com/book/10.1007/978-1-4614-6849-3?page=1) are used to assign different levels of importance to different classes when the distribution of instances across different classes in a classification problem is not equal. By assigning higher weights to the minority class, the model is encouraged to give more attention to correctly predicting instances from the minority class. Class weights are incorporated into the loss function during training. The loss for each instance is multiplied by its corresponding class weight. This means that misclassifying an instance from the minority class will have a greater impact on the overall loss than misclassifying an instance from the majority class. The use of class weights helps balance the influence of each class during training, mitigating the impact of class imbalance. It provides a way to focus the learning process on the classes that are underrepresented in the training data.
+
+[Synthetic Minority Oversampling Technique](https://dl.acm.org/doi/10.5555/1622407.1622416) is specifically designed to increase the representation of the minority class by generating new minority instances between existing instances. The new instances created are not just the copy of existing minority cases, instead for each minority class instance, the algorithm generates synthetic examples by creating linear combinations of the feature vectors between that instance and its k nearest neighbors. The synthetic samples are placed along the line segments connecting the original instance to its neighbors.
+
+[Condensed Nearest Neighbors](https://ieeexplore.ieee.org/document/1054155) is a prototype selection algorithm that aims to select a subset of instances from the original dataset, discarding redundant and less informative instances. The algorithm works by iteratively adding instances to the subset, starting with an empty set. At each iteration, an instance is added if it is not correctly classified by the current subset. The decision to add or discard an instance is based on its performance on a k-nearest neighbors classifier. If an instance is misclassified by the current subset's k-nearest neighbors, it is added to the subset. The process is repeated until no new instances are added to the subset. The resulting subset is a condensed representation of the dataset that retains the essential information needed for classification.
+
+[Model Stacking](https://www.manning.com/books/ensemble-methods-for-machine-learning) - also known as stacked generalization, is an ensemble approach which involves creating a variety of base learners and using them to create intermediate predictions, one for each learned model. A meta-model is incorporated that gains knowledge of the same target from intermediate predictions. Unlike bagging, in stacking, the models are typically different (e.g. not all decision trees) and fit on the same dataset (e.g. instead of samples of the training dataset). Unlike boosting, in stacking, a single model is used to learn how to best combine the predictions from the contributing models (e.g. instead of a sequence of models that correct the predictions of prior models). Stacking is appropriate when the predictions made by the base learners or the errors in predictions made by the models have minimal correlation. Achieving an improvement in performance is dependent upon the choice of base learners and whether they are sufficiently skillful in their predictions.
+
+
+### 1.2.4 Model Hyperparameter Tuning <a class="anchor" id="1.2.4"></a>
+
+
+### 1.2.5 Model Performance Evaluation <a class="anchor" id="1.2.5"></a>
 
 
 
-The target variable for the study is:
-
-
-The predictor variables for the study are:
-
-
+### 1.2.6 Model Presentation <a class="anchor" id="1.2.1"></a>
 
 ## 1.3. Results <a class="anchor" id="1.3"></a>
 
@@ -3136,10 +3176,6 @@ display(cancer_rate_cleaned.shape)
 
 #### 1.3.3.2 Missing Data Imputation <a class="anchor" id="1.3.3.2"></a>
 
-[Iterative Imputer](https://scikit-learn.org/stable/modules/generated/sklearn.impute.IterativeImputer.html) is based on the [Multivariate Imputation by Chained Equations](https://journals.sagepub.com/doi/10.1177/0962280206074463) (MICE) algorithm - an imputation method based on fully conditional specification, where each incomplete variable is imputed by a separate model. As a sequential regression imputation technique, the algorithm imputes an incomplete column (target column) by generating plausible synthetic values given other columns in the data. Each incomplete column must act as a target column, and has its own specific set of predictors. For predictors that are incomplete themselves, the most recently generated imputations are used to complete the predictors prior to prior to imputation of the target columns.
-
-[Linear Regression](https://link.springer.com/book/10.1007/978-1-4757-3462-1) explores the linear relationship between a scalar response and one or more covariates by having the conditional mean of the dependent variable be an affine function of the independent variables. The relationship is modeled through a disturbance term which represents an unobserved random variable that adds noise. The algorithm is typically formulated from the data using the least squares method which seeks to estimate the coefficients by minimizing the squared residual function. The linear equation assigns one scale factor represented by a coefficient to each covariate and an additional coefficient called the intercept or the bias coefficient which gives the line an additional degree of freedom allowing to move up and down a two-dimensional plot.
-
 1. Missing data for numeric variables were imputed using the iterative imputer algorithm with a  linear regression estimator.
     * <span style="color: #FF0000">GDPPER</span>: Null.Count = 1
     * <span style="color: #FF0000">FORARE</span>: Null.Count = 1
@@ -4234,97 +4270,95 @@ for column in cancer_rate_imputed_numeric:
 
 
     
-![png](output_129_0.png)
+![png](output_135_0.png)
     
 
 
 
     
-![png](output_129_1.png)
+![png](output_135_1.png)
     
 
 
 
     
-![png](output_129_2.png)
+![png](output_135_2.png)
     
 
 
 
     
-![png](output_129_3.png)
+![png](output_135_3.png)
     
 
 
 
     
-![png](output_129_4.png)
+![png](output_135_4.png)
     
 
 
 
     
-![png](output_129_5.png)
+![png](output_135_5.png)
     
 
 
 
     
-![png](output_129_6.png)
+![png](output_135_6.png)
     
 
 
 
     
-![png](output_129_7.png)
+![png](output_135_7.png)
     
 
 
 
     
-![png](output_129_8.png)
+![png](output_135_8.png)
     
 
 
 
     
-![png](output_129_9.png)
+![png](output_135_9.png)
     
 
 
 
     
-![png](output_129_10.png)
+![png](output_135_10.png)
     
 
 
 
     
-![png](output_129_11.png)
+![png](output_135_11.png)
     
 
 
 
     
-![png](output_129_12.png)
+![png](output_135_12.png)
     
 
 
 
     
-![png](output_129_13.png)
+![png](output_135_13.png)
     
 
 
 
     
-![png](output_129_14.png)
+![png](output_135_14.png)
     
 
 
 #### 1.3.3.4 Collinearity <a class="anchor" id="1.3.3.4"></a>
-
-[Pearson’s Correlation Coefficient](https://royalsocietypublishing.org/doi/10.1098/rsta.1896.0007) is a parametric measure of the linear correlation for a pair of features by calculating the ratio between their covariance and the product of their standard deviations. The presence of high absolute correlation values indicate the univariate association between the numeric predictors and the numeric response.
 
 1. Majority of the numeric variables reported moderate to high correlation which were statistically significant.
 2. Among pairwise combinations of numeric variables, high Pearson.Correlation.Coefficient values were noted for:
@@ -4550,7 +4584,7 @@ plt.show()
 
 
     
-![png](output_134_0.png)
+![png](output_140_0.png)
     
 
 
@@ -4587,7 +4621,7 @@ plot_correlation_matrix(cancer_rate_imputed_numeric_correlation,mask)
 
 
     
-![png](output_136_0.png)
+![png](output_142_0.png)
     
 
 
@@ -4619,8 +4653,6 @@ display(cancer_rate_imputed_numeric.shape)
 
 
 #### 1.3.3.5 Shape Transformation <a class="anchor" id="1.3.3.5"></a>
-
-[Yeo-Johnson Transformation](https://academic.oup.com/biomet/article-abstract/87/4/954/232908?redirectedFrom=fulltext&login=false) applies a new family of distributions that can be used without restrictions, extending many of the good properties of the Box-Cox power family. Similar to the Box-Cox transformation, the method also estimates the optimal value of lambda but has the ability to transform both positive and negative values by inflating low variance data and deflating high variance data to create a more uniform data set. While there are no restrictions in terms of the applicable values, the interpretability of the transformed values is more diminished as compared to the other methods.
 
 1. A Yeo-Johnson transformation was applied to all numeric variables to improve distributional shape.
 2. Most variables achieved symmetrical distributions with minimal outliers after transformation.
@@ -4684,79 +4716,79 @@ for column in cancer_rate_transformed_numeric:
 
 
     
-![png](output_142_0.png)
+![png](output_148_0.png)
     
 
 
 
     
-![png](output_142_1.png)
+![png](output_148_1.png)
     
 
 
 
     
-![png](output_142_2.png)
+![png](output_148_2.png)
     
 
 
 
     
-![png](output_142_3.png)
+![png](output_148_3.png)
     
 
 
 
     
-![png](output_142_4.png)
+![png](output_148_4.png)
     
 
 
 
     
-![png](output_142_5.png)
+![png](output_148_5.png)
     
 
 
 
     
-![png](output_142_6.png)
+![png](output_148_6.png)
     
 
 
 
     
-![png](output_142_7.png)
+![png](output_148_7.png)
     
 
 
 
     
-![png](output_142_8.png)
+![png](output_148_8.png)
     
 
 
 
     
-![png](output_142_9.png)
+![png](output_148_9.png)
     
 
 
 
     
-![png](output_142_10.png)
+![png](output_148_10.png)
     
 
 
 
     
-![png](output_142_11.png)
+![png](output_148_11.png)
     
 
 
 
     
-![png](output_142_12.png)
+![png](output_148_12.png)
     
 
 
@@ -4846,73 +4878,73 @@ for column in cancer_rate_scaled_numeric:
 
 
     
-![png](output_148_0.png)
+![png](output_154_0.png)
     
 
 
 
     
-![png](output_148_1.png)
+![png](output_154_1.png)
     
 
 
 
     
-![png](output_148_2.png)
+![png](output_154_2.png)
     
 
 
 
     
-![png](output_148_3.png)
+![png](output_154_3.png)
     
 
 
 
     
-![png](output_148_4.png)
+![png](output_154_4.png)
     
 
 
 
     
-![png](output_148_5.png)
+![png](output_154_5.png)
     
 
 
 
     
-![png](output_148_6.png)
+![png](output_154_6.png)
     
 
 
 
     
-![png](output_148_7.png)
+![png](output_154_7.png)
     
 
 
 
     
-![png](output_148_8.png)
+![png](output_154_8.png)
     
 
 
 
     
-![png](output_148_9.png)
+![png](output_154_9.png)
     
 
 
 
     
-![png](output_148_10.png)
+![png](output_154_10.png)
     
 
 
 
     
-![png](output_148_11.png)
+![png](output_154_11.png)
     
 
 
@@ -5095,7 +5127,7 @@ plt.show()
 
 
     
-![png](output_160_0.png)
+![png](output_166_0.png)
     
 
 
@@ -5152,7 +5184,7 @@ plt.show()
 
 
     
-![png](output_161_0.png)
+![png](output_167_0.png)
     
 
 
@@ -5382,9 +5414,6 @@ display(cancer_rate_preprocessed_categorical_summary.sort_values(by=['ChiSquare.
 
 ### 1.3.5. Model Development With Hyperparameter Tuning <a class="anchor" id="1.3.5"></a>
 
-[Hyperparameter tuning](https://link.springer.com/book/10.1007/978-1-4614-6849-3?page=1) is an iterative process that involves experimenting with different hyperparameter combinations, evaluating the model's performance, and refining the hyperparameter values to achieve the best possible performance on new, unseen data - aimed at building effective and well-generalizing machine learning models. A model's performance depends not only on the learned parameters (weights) during training but also on hyperparameters, which are external configuration settings that cannot be learned from the data. 
-
-
 #### 1.3.5.1 Premodelling Data Description <a class="anchor" id="1.3.5.1"></a>
 
 1. Among the 9 numeric variables determined to have a statistically significant difference between the means of the numeric measurements obtained from LOW and HIGH groups of the <span style="color: #FF0000">CANRAT</span> target variable, only 7 were retained with absolute T-Test statistics greater than 5. 
@@ -5461,7 +5490,7 @@ plt.show()
 
 
     
-![png](output_172_0.png)
+![png](output_178_0.png)
     
 
 
@@ -5569,8 +5598,6 @@ def model_performance_evaluation(y_true, y_pred):
 ```
 
 #### 1.3.5.2 Logistic Regression <a class="anchor" id="1.3.5.2"></a>
-
-[Logistic Regression](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=360300) models the relationship between the probability of an event (among two outcome levels) by having the log-odds of the event be a linear combination of a set of predictors weighted by their respective parameter estimates. The parameters are estimated via maximum likelihood estimation by testing different values through multiple iterations to optimize for the best fit of log odds. All of these iterations produce the log likelihood function, and logistic regression seeks to maximize this function to find the best parameter estimates. Given the optimal parameters, the conditional probabilities for each observation can be calculated, logged, and summed together to yield a predicted probability.
 
 1. The [logistic regression model](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) from the <mark style="background-color: #CCECFF"><b>sklearn.linear_model</b></mark> Python library API was implemented. 
 2. The model contains 5 hyperparameters:
@@ -5830,8 +5857,6 @@ display(optimal_logistic_regression_performance_test)
 
 #### 1.3.5.3 Decision Trees <a class="anchor" id="1.3.5.3"></a>
 
-[Decision trees](https://www.semanticscholar.org/paper/Classification-and-Regression-Trees-Breiman-Friedman/8017699564136f93af21575810d557dba1ee6fc6) create a model that predicts the class label of a sample based on input features. A decision tree consists of nodes that represent decisions or choices, edges which connect nodes and represent the possible outcomes of a decision and leaf (or terminal) nodes which represent the final decision or the predicted class label. The decision-making process involves feature selection (at each internal node, the algorithm decides which feature to split on based on a certain criterion including gini impurity or entropy), splitting criteria (the splitting criteria aim to find the feature and its corresponding threshold that best separates the data into different classes. The goal is to increase homogeneity within each resulting subset), recursive splitting (the process of feature selection and splitting continues recursively, creating a tree structure. The dataset is partitioned at each internal node based on the chosen feature, and the process repeats for each subset) and stopping criteria (the recursion stops when a certain condition is met, known as a stopping criterion. Common stopping criteria include a maximum depth for the tree, a minimum number of samples required to split a node, or a minimum number of samples in a leaf node.)
-
 1. The [decision tree model](https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html) from the <mark style="background-color: #CCECFF"><b>sklearn.tree</b></mark> Python library API was implemented. 
 2. The model contains 5 hyperparameters:
     * <span style="color: #FF0000">criterion</span> = function to measure the quality of a split made to vary between Gini, Entropy and Log-Loss
@@ -6085,8 +6110,6 @@ display(optimal_decision_tree_performance_test)
 
 
 #### 1.3.5.4 Random Forest <a class="anchor" id="1.3.5.4"></a>
-
-[Random Forest](https://link.springer.com/article/10.1023/A:1010933404324) is an ensemble learning method made up of a large set of small decision trees called estimators, with each producing its own prediction. The random forest model aggregates the predictions of the estimators to produce a more accurate prediction. The algorithm involves bootstrap aggregating (where smaller subsets of the training data are repeatedly subsampled with replacement), random subspacing (where a subset of features are sampled and used to train each individual estimator), estimator training (where unpruned decision trees are formulated for each estimator) and inference by aggregating the predictions of all estimators.
 
 1. The [random forest model](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#) from the <mark style="background-color: #CCECFF"><b>sklearn.ensemble</b></mark> Python library API was implemented. 
 2. The model contains 5 hyperparameters:
@@ -6350,8 +6373,6 @@ display(optimal_random_forest_performance_test)
 
 #### 1.3.5.5 Support Vector Machine <a class="anchor" id="1.3.5.5"></a>
 
-[Support Vector Machine](https://dl.acm.org/doi/10.1145/130385.130401) plots each observation in an N-dimensional space corresponding to the number of features in the data set and finds a hyperplane that maximally separates the different classes by a maximally large margin (which is defined as the distance between the hyperplane and the closest data points from each class). The algorithm applies kernel transformation by mapping non-linearly separable data using the similarities between the points in a high-dimensional feature space for improved discrimination.
-
 1. The [support vector machine model](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html) from the <mark style="background-color: #CCECFF"><b>sklearn.svm</b></mark> Python library API was implemented. 
 2. The model contains 5 hyperparameters:
     * <span style="color: #FF0000">C</span> = inverse of regularization strength held constant at a value of 1
@@ -6599,8 +6620,6 @@ display(optimal_support_vector_machine_performance_test)
 
 ### 1.3.6 Model Development With Class Weights <a class="anchor" id="1.3.6"></a>
 
-[Class weights](https://link.springer.com/book/10.1007/978-1-4614-6849-3?page=1) are used to assign different levels of importance to different classes when the distribution of instances across different classes in a classification problem is not equal. By assigning higher weights to the minority class, the model is encouraged to give more attention to correctly predicting instances from the minority class. Class weights are incorporated into the loss function during training. The loss for each instance is multiplied by its corresponding class weight. This means that misclassifying an instance from the minority class will have a greater impact on the overall loss than misclassifying an instance from the majority class. The use of class weights helps balance the influence of each class during training, mitigating the impact of class imbalance. It provides a way to focus the learning process on the classes that are underrepresented in the training data.
-
 #### 1.3.6.1 Premodelling Data Description <a class="anchor" id="1.3.6.1"></a>
 
 1. Among the 9 numeric variables determined to have a statistically significant difference between the means of the numeric measurements obtained from LOW and HIGH groups of the <span style="color: #FF0000">CANRAT</span> target variable, only 7 were retained with absolute T-Test statistics greater than 5. 
@@ -6677,7 +6696,7 @@ plt.show()
 
 
     
-![png](output_201_0.png)
+![png](output_207_0.png)
     
 
 
@@ -6785,8 +6804,6 @@ def model_performance_evaluation(y_true, y_pred):
 ```
 
 #### 1.3.6.2 Logistic Regression <a class="anchor" id="1.3.6.2"></a>
-
-[Logistic Regression](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=360300) models the relationship between the probability of an event (among two outcome levels) by having the log-odds of the event be a linear combination of a set of predictors weighted by their respective parameter estimates. The parameters are estimated via maximum likelihood estimation by testing different values through multiple iterations to optimize for the best fit of log odds. All of these iterations produce the log likelihood function, and logistic regression seeks to maximize this function to find the best parameter estimates. Given the optimal parameters, the conditional probabilities for each observation can be calculated, logged, and summed together to yield a predicted probability.
 
 1. The [logistic regression model](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) from the <mark style="background-color: #CCECFF"><b>sklearn.linear_model</b></mark> Python library API was implemented. 
 2. The model contains 5 hyperparameters:
@@ -7044,274 +7061,7 @@ display(weighted_logistic_regression_performance_test)
 </div>
 
 
-
-```python
-final_model = LogisticRegression(C=1.0,
-                                 class_weight={0: 0.25, 1: 0.75},
-                                 solver='liblinear',
-                                 penalty= 'l2',
-                                 max_iter=500,
-                                 random_state=88888888)
-final_model.fit(X_train, y_train)
-```
-
-
-
-
-<style>#sk-container-id-1 {color: black;background-color: white;}#sk-container-id-1 pre{padding: 0;}#sk-container-id-1 div.sk-toggleable {background-color: white;}#sk-container-id-1 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-1 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-1 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-1 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-1 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-1 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-1 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-1 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-1 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-1 div.sk-item {position: relative;z-index: 1;}#sk-container-id-1 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-1 div.sk-item::before, #sk-container-id-1 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-1 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-1 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-1 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-1 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-1 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-1 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-1 div.sk-label-container {text-align: center;}#sk-container-id-1 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-1 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>LogisticRegression(class_weight={0: 0.25, 1: 0.75}, max_iter=500,
-                   random_state=88888888, solver=&#x27;liblinear&#x27;)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" checked><label for="sk-estimator-id-1" class="sk-toggleable__label sk-toggleable__label-arrow">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(class_weight={0: 0.25, 1: 0.75}, max_iter=500,
-                   random_state=88888888, solver=&#x27;liblinear&#x27;)</pre></div></div></div></div></div>
-
-
-
-
-```python
-final_model_coefficient = pd.DataFrame(zip(X_train.columns, 
-                                           final_model.coef_[0].tolist(),
-                                           np.exp(final_model.coef_)[0].tolist()),
-                                       columns=['model_predictor','model_coefficient','odds_ratio'])
-display(final_model_coefficient)
-```
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>model_predictor</th>
-      <th>model_coefficient</th>
-      <th>odds_ratio</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>URBPOP</td>
-      <td>0.093942</td>
-      <td>1.098496</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>LIFEXP</td>
-      <td>0.472572</td>
-      <td>1.604115</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>TUBINC</td>
-      <td>-0.412017</td>
-      <td>0.662313</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>DTHCMD</td>
-      <td>-0.534044</td>
-      <td>0.586229</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>CO2EMI</td>
-      <td>-0.150646</td>
-      <td>0.860152</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>GDPCAP</td>
-      <td>0.596013</td>
-      <td>1.814868</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>EPISCO</td>
-      <td>1.135875</td>
-      <td>3.113897</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>HDICAT_VH</td>
-      <td>0.268438</td>
-      <td>1.307920</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-```python
-final_model_explainer = shap.Explainer(final_model, X_train)
-final_model_train_shap_values = final_model_explainer(X_train)
-final_model_test_shap_values = final_model_explainer(X_test)
-```
-
-
-```python
-shap.plots.beeswarm(final_model_train_shap_values, show=False, plot_size=(10, 6))
-plt.xlim([-3, 3])
-plt.show()
-```
-
-
-    
-![png](output_216_0.png)
-    
-
-
-
-```python
-shap.plots.beeswarm(final_model_test_shap_values, show=False, plot_size=(10, 6))
-plt.xlim([-3, 3])
-plt.show()
-```
-
-
-    
-![png](output_217_0.png)
-    
-
-
-
-```python
-shap.plots.bar(final_model_train_shap_values, show=False)
-plt.xlim([0, 1])
-plt.show()
-```
-
-
-    
-![png](output_218_0.png)
-    
-
-
-
-```python
-shap.plots.bar(final_model_test_shap_values, show=False)
-plt.xlim([0, 1])
-plt.show()
-```
-
-
-    
-![png](output_219_0.png)
-    
-
-
-
-```python
-shap.plots.heatmap(final_model_train_shap_values)
-```
-
-
-    
-![png](output_220_0.png)
-    
-
-
-
-```python
-shap.plots.heatmap(final_model_test_shap_values)
-```
-
-
-    
-![png](output_221_0.png)
-    
-
-
-
-```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="GDPCAP")
-```
-
-
-    
-![png](output_222_0.png)
-    
-
-
-
-```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="DTHCMD")
-```
-
-
-    
-![png](output_223_0.png)
-    
-
-
-
-```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="LIFEXP")
-```
-
-
-    
-![png](output_224_0.png)
-    
-
-
-
-```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="TUBINC")
-```
-
-
-    
-![png](output_225_0.png)
-    
-
-
-
-```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="CO2EMI")
-```
-
-
-    
-![png](output_226_0.png)
-    
-
-
-
-```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="HDICAT_VH")
-```
-
-
-    
-![png](output_227_0.png)
-    
-
-
-
-```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="URBPOP")
-```
-
-
-    
-![png](output_228_0.png)
-    
-
-
 #### 1.3.6.3 Decision Trees <a class="anchor" id="1.3.6.3"></a>
-
-[Decision trees](https://www.semanticscholar.org/paper/Classification-and-Regression-Trees-Breiman-Friedman/8017699564136f93af21575810d557dba1ee6fc6) create a model that predicts the class label of a sample based on input features. A decision tree consists of nodes that represent decisions or choices, edges which connect nodes and represent the possible outcomes of a decision and leaf (or terminal) nodes which represent the final decision or the predicted class label. The decision-making process involves feature selection (at each internal node, the algorithm decides which feature to split on based on a certain criterion including gini impurity or entropy), splitting criteria (the splitting criteria aim to find the feature and its corresponding threshold that best separates the data into different classes. The goal is to increase homogeneity within each resulting subset), recursive splitting (the process of feature selection and splitting continues recursively, creating a tree structure. The dataset is partitioned at each internal node based on the chosen feature, and the process repeats for each subset) and stopping criteria (the recursion stops when a certain condition is met, known as a stopping criterion. Common stopping criteria include a maximum depth for the tree, a minimum number of samples required to split a node, or a minimum number of samples in a leaf node.)
 
 1. The [decision tree model](https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html) from the <mark style="background-color: #CCECFF"><b>sklearn.tree</b></mark> Python library API was implemented. 
 2. The model contains 5 hyperparameters:
@@ -7566,8 +7316,6 @@ display(weighted_decision_tree_performance_test)
 
 
 #### 1.3.6.4 Random Forest <a class="anchor" id="1.3.6.4"></a>
-
-[Random Forest](https://link.springer.com/article/10.1023/A:1010933404324) is an ensemble learning method made up of a large set of small decision trees called estimators, with each producing its own prediction. The random forest model aggregates the predictions of the estimators to produce a more accurate prediction. The algorithm involves bootstrap aggregating (where smaller subsets of the training data are repeatedly subsampled with replacement), random subspacing (where a subset of features are sampled and used to train each individual estimator), estimator training (where unpruned decision trees are formulated for each estimator) and inference by aggregating the predictions of all estimators.
 
 1. The [random forest model](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#) from the <mark style="background-color: #CCECFF"><b>sklearn.ensemble</b></mark> Python library API was implemented. 
 2. The model contains 5 hyperparameters:
@@ -7831,8 +7579,6 @@ display(weighted_random_forest_performance_test)
 
 #### 1.3.6.5 Support Vector Machine <a class="anchor" id="1.3.6.5"></a>
 
-[Support Vector Machine](https://dl.acm.org/doi/10.1145/130385.130401) plots each observation in an N-dimensional space corresponding to the number of features in the data set and finds a hyperplane that maximally separates the different classes by a maximally large margin (which is defined as the distance between the hyperplane and the closest data points from each class). The algorithm applies kernel transformation by mapping non-linearly separable data using the similarities between the points in a high-dimensional feature space for improved discrimination.
-
 1. The [support vector machine model](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html) from the <mark style="background-color: #CCECFF"><b>sklearn.svm</b></mark> Python library API was implemented. 
 2. The model contains 5 hyperparameters:
     * <span style="color: #FF0000">C</span> = inverse of regularization strength held constant at a value of 1
@@ -8083,8 +7829,6 @@ display(weighted_support_vector_machine_performance_test)
 
 ### 1.3.7 Model Development With SMOTE Upsampling <a class="anchor" id="1.3.7"></a>
 
-[Synthetic Minority Oversampling Technique](https://dl.acm.org/doi/10.5555/1622407.1622416) is specifically designed to increase the representation of the minority class by generating new minority instances between existing instances. The new instances created are not just the copy of existing minority cases, instead for each minority class instance, the algorithm generates synthetic examples by creating linear combinations of the feature vectors between that instance and its k nearest neighbors. The synthetic samples are placed along the line segments connecting the original instance to its neighbors.
-
 #### 1.3.7.1 Premodelling Data Description <a class="anchor" id="1.3.7.1"></a>
 
 1. Among the 9 numeric variables determined to have a statistically significant difference between the means of the numeric measurements obtained from LOW and HIGH groups of the <span style="color: #FF0000">CANRAT</span> target variable, only 7 were retained with absolute T-Test statistics greater than 5. 
@@ -8161,7 +7905,7 @@ plt.show()
 
 
     
-![png](output_246_0.png)
+![png](output_236_0.png)
     
 
 
@@ -8313,8 +8057,6 @@ def model_performance_evaluation(y_true, y_pred):
 ```
 
 #### 1.3.7.2 Logistic Regression <a class="anchor" id="1.3.7.2"></a>
-
-[Logistic Regression](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=360300) models the relationship between the probability of an event (among two outcome levels) by having the log-odds of the event be a linear combination of a set of predictors weighted by their respective parameter estimates. The parameters are estimated via maximum likelihood estimation by testing different values through multiple iterations to optimize for the best fit of log odds. All of these iterations produce the log likelihood function, and logistic regression seeks to maximize this function to find the best parameter estimates. Given the optimal parameters, the conditional probabilities for each observation can be calculated, logged, and summed together to yield a predicted probability.
 
 1. The [logistic regression model](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) from the <mark style="background-color: #CCECFF"><b>sklearn.linear_model</b></mark> Python library API was implemented. 
 2. The model contains 5 hyperparameters:
@@ -8574,8 +8316,6 @@ display(upsampled_logistic_regression_performance_test)
 
 #### 1.3.7.3 Decision Trees <a class="anchor" id="1.3.7.3"></a>
 
-[Decision trees](https://www.semanticscholar.org/paper/Classification-and-Regression-Trees-Breiman-Friedman/8017699564136f93af21575810d557dba1ee6fc6) create a model that predicts the class label of a sample based on input features. A decision tree consists of nodes that represent decisions or choices, edges which connect nodes and represent the possible outcomes of a decision and leaf (or terminal) nodes which represent the final decision or the predicted class label. The decision-making process involves feature selection (at each internal node, the algorithm decides which feature to split on based on a certain criterion including gini impurity or entropy), splitting criteria (the splitting criteria aim to find the feature and its corresponding threshold that best separates the data into different classes. The goal is to increase homogeneity within each resulting subset), recursive splitting (the process of feature selection and splitting continues recursively, creating a tree structure. The dataset is partitioned at each internal node based on the chosen feature, and the process repeats for each subset) and stopping criteria (the recursion stops when a certain condition is met, known as a stopping criterion. Common stopping criteria include a maximum depth for the tree, a minimum number of samples required to split a node, or a minimum number of samples in a leaf node.)
-
 1. The [decision tree model](https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html) from the <mark style="background-color: #CCECFF"><b>sklearn.tree</b></mark> Python library API was implemented. 
 2. The model contains 5 hyperparameters:
     * <span style="color: #FF0000">criterion</span> = function to measure the quality of a split made to vary between Gini, Entropy and Log-Loss
@@ -8829,8 +8569,6 @@ display(upsampled_decision_tree_performance_test)
 
 
 #### 1.3.7.4 Random Forest <a class="anchor" id="1.3.7.4"></a>
-
-[Random Forest](https://link.springer.com/article/10.1023/A:1010933404324) is an ensemble learning method made up of a large set of small decision trees called estimators, with each producing its own prediction. The random forest model aggregates the predictions of the estimators to produce a more accurate prediction. The algorithm involves bootstrap aggregating (where smaller subsets of the training data are repeatedly subsampled with replacement), random subspacing (where a subset of features are sampled and used to train each individual estimator), estimator training (where unpruned decision trees are formulated for each estimator) and inference by aggregating the predictions of all estimators.
 
 1. The [random forest model](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#) from the <mark style="background-color: #CCECFF"><b>sklearn.ensemble</b></mark> Python library API was implemented. 
 2. The model contains 5 hyperparameters:
@@ -9094,8 +8832,6 @@ display(upsampled_random_forest_performance_test)
 
 #### 1.3.7.5 Support Vector Machine <a class="anchor" id="1.3.7.5"></a>
 
-[Support Vector Machine](https://dl.acm.org/doi/10.1145/130385.130401) plots each observation in an N-dimensional space corresponding to the number of features in the data set and finds a hyperplane that maximally separates the different classes by a maximally large margin (which is defined as the distance between the hyperplane and the closest data points from each class). The algorithm applies kernel transformation by mapping non-linearly separable data using the similarities between the points in a high-dimensional feature space for improved discrimination.
-
 1. The [support vector machine model](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html) from the <mark style="background-color: #CCECFF"><b>sklearn.svm</b></mark> Python library API was implemented. 
 2. The model contains 5 hyperparameters:
     * <span style="color: #FF0000">C</span> = inverse of regularization strength held constant at a value of 1
@@ -9343,8 +9079,6 @@ display(upsampled_support_vector_machine_performance_test)
 
 ### 1.3.8 Model Development With CNN Downsampling <a class="anchor" id="1.3.8"></a>
 
-[Condensed Nearest Neighbors](https://ieeexplore.ieee.org/document/1054155) is a prototype selection algorithm that aims to select a subset of instances from the original dataset, discarding redundant and less informative instances. The algorithm works by iteratively adding instances to the subset, starting with an empty set. At each iteration, an instance is added if it is not correctly classified by the current subset. The decision to add or discard an instance is based on its performance on a k-nearest neighbors classifier. If an instance is misclassified by the current subset's k-nearest neighbors, it is added to the subset. The process is repeated until no new instances are added to the subset. The resulting subset is a condensed representation of the dataset that retains the essential information needed for classification.
-
 #### 1.3.8.1 Premodelling Data Description <a class="anchor" id="1.3.8.1"></a>
 
 1. Among the 9 numeric variables determined to have a statistically significant difference between the means of the numeric measurements obtained from LOW and HIGH groups of the <span style="color: #FF0000">CANRAT</span> target variable, only 7 were retained with absolute T-Test statistics greater than 5. 
@@ -9421,7 +9155,7 @@ plt.show()
 
 
     
-![png](output_278_0.png)
+![png](output_268_0.png)
     
 
 
@@ -9573,8 +9307,6 @@ def model_performance_evaluation(y_true, y_pred):
 ```
 
 #### 1.3.8.2 Logistic Regression <a class="anchor" id="1.3.9.2"></a>
-
-[Logistic Regression](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=360300) models the relationship between the probability of an event (among two outcome levels) by having the log-odds of the event be a linear combination of a set of predictors weighted by their respective parameter estimates. The parameters are estimated via maximum likelihood estimation by testing different values through multiple iterations to optimize for the best fit of log odds. All of these iterations produce the log likelihood function, and logistic regression seeks to maximize this function to find the best parameter estimates. Given the optimal parameters, the conditional probabilities for each observation can be calculated, logged, and summed together to yield a predicted probability.
 
 1. The [logistic regression model](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) from the <mark style="background-color: #CCECFF"><b>sklearn.linear_model</b></mark> Python library API was implemented. 
 2. The model contains 5 hyperparameters:
@@ -9834,8 +9566,6 @@ display(downsampled_logistic_regression_performance_test)
 
 #### 1.3.8.3 Decision Trees <a class="anchor" id="1.3.8.3"></a>
 
-[Decision trees](https://www.semanticscholar.org/paper/Classification-and-Regression-Trees-Breiman-Friedman/8017699564136f93af21575810d557dba1ee6fc6) create a model that predicts the class label of a sample based on input features. A decision tree consists of nodes that represent decisions or choices, edges which connect nodes and represent the possible outcomes of a decision and leaf (or terminal) nodes which represent the final decision or the predicted class label. The decision-making process involves feature selection (at each internal node, the algorithm decides which feature to split on based on a certain criterion including gini impurity or entropy), splitting criteria (the splitting criteria aim to find the feature and its corresponding threshold that best separates the data into different classes. The goal is to increase homogeneity within each resulting subset), recursive splitting (the process of feature selection and splitting continues recursively, creating a tree structure. The dataset is partitioned at each internal node based on the chosen feature, and the process repeats for each subset) and stopping criteria (the recursion stops when a certain condition is met, known as a stopping criterion. Common stopping criteria include a maximum depth for the tree, a minimum number of samples required to split a node, or a minimum number of samples in a leaf node.)
-
 1. The [decision tree model](https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html) from the <mark style="background-color: #CCECFF"><b>sklearn.tree</b></mark> Python library API was implemented. 
 2. The model contains 5 hyperparameters:
     * <span style="color: #FF0000">criterion</span> = function to measure the quality of a split made to vary between Gini, Entropy and Log-Loss
@@ -10089,8 +9819,6 @@ display(downsampled_decision_tree_performance_test)
 
 
 #### 1.3.8.4 Random Forest <a class="anchor" id="1.3.8.4"></a>
-
-[Random Forest](https://link.springer.com/article/10.1023/A:1010933404324) is an ensemble learning method made up of a large set of small decision trees called estimators, with each producing its own prediction. The random forest model aggregates the predictions of the estimators to produce a more accurate prediction. The algorithm involves bootstrap aggregating (where smaller subsets of the training data are repeatedly subsampled with replacement), random subspacing (where a subset of features are sampled and used to train each individual estimator), estimator training (where unpruned decision trees are formulated for each estimator) and inference by aggregating the predictions of all estimators.
 
 1. The [random forest model](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#) from the <mark style="background-color: #CCECFF"><b>sklearn.ensemble</b></mark> Python library API was implemented. 
 2. The model contains 5 hyperparameters:
@@ -10354,8 +10082,6 @@ display(downsampled_random_forest_performance_test)
 
 #### 1.3.8.5 Support Vector Machine <a class="anchor" id="1.3.8.5"></a>
 
-[Support Vector Machine](https://dl.acm.org/doi/10.1145/130385.130401) plots each observation in an N-dimensional space corresponding to the number of features in the data set and finds a hyperplane that maximally separates the different classes by a maximally large margin (which is defined as the distance between the hyperplane and the closest data points from each class). The algorithm applies kernel transformation by mapping non-linearly separable data using the similarities between the points in a high-dimensional feature space for improved discrimination.
-
 1. The [support vector machine model](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html) from the <mark style="background-color: #CCECFF"><b>sklearn.svm</b></mark> Python library API was implemented. 
 2. The model contains 5 hyperparameters:
     * <span style="color: #FF0000">C</span> = inverse of regularization strength held constant at a value of 1
@@ -10602,8 +10328,6 @@ display(downsampled_support_vector_machine_performance_test)
 
 
 ### 1.3.9 Model Development With Stacking Ensemble Learning <a class="anchor" id="1.3.9"></a>
-
-[Model Stacking](https://www.manning.com/books/ensemble-methods-for-machine-learning) - also known as stacked generalization, is an ensemble approach which involves creating a variety of base learners and using them to create intermediate predictions, one for each learned model. A meta-model is incorporated that gains knowledge of the same target from intermediate predictions. Unlike bagging, in stacking, the models are typically different (e.g. not all decision trees) and fit on the same dataset (e.g. instead of samples of the training dataset). Unlike boosting, in stacking, a single model is used to learn how to best combine the predictions from the contributing models (e.g. instead of a sequence of models that correct the predictions of prior models). Stacking is appropriate when the predictions made by the base learners or the errors in predictions made by the models have minimal correlation. Achieving an improvement in performance is dependent upon the choice of base learners and whether they are sufficiently skillful in their predictions.
 
 #### 1.3.9.1 Premodelling Data Description <a class="anchor" id="1.3.9.1"></a>
 
@@ -11063,7 +10787,7 @@ for container in logistic_regression_performance_comparison_F1_plot.containers:
 
 
     
-![png](output_310_0.png)
+![png](output_300_0.png)
     
 
 
@@ -11094,7 +10818,7 @@ plt.show()
 
 
     
-![png](output_311_0.png)
+![png](output_301_0.png)
     
 
 
@@ -11528,7 +11252,7 @@ for container in decision_tree_performance_comparison_F1_plot.containers:
 
 
     
-![png](output_315_0.png)
+![png](output_305_0.png)
     
 
 
@@ -11557,9 +11281,19 @@ fig.colorbar(disp.im_, ax=axes)
 plt.show()
 ```
 
+    Exception ignored in: <function WeakMethod.__new__.<locals>._cb at 0x0000026F7A4A0C20>
+    Traceback (most recent call last):
+      File "C:\Users\anaconda3\Lib\weakref.py", line 60, in _cb
+        callback(self)
+      File "C:\Users\anaconda3\Lib\site-packages\matplotlib\cbook\__init__.py", line 254, in _remove_proxy
+        del self.callbacks[signal][cid]
+            ~~~~~~~~~~~~~~^^^^^^^^
+    KeyError: 'changed'
+    
+
 
     
-![png](output_316_0.png)
+![png](output_306_1.png)
     
 
 
@@ -11993,7 +11727,7 @@ for container in random_forest_performance_comparison_F1_plot.containers:
 
 
     
-![png](output_320_0.png)
+![png](output_310_0.png)
     
 
 
@@ -12024,7 +11758,7 @@ plt.show()
 
 
     
-![png](output_321_0.png)
+![png](output_311_0.png)
     
 
 
@@ -12458,7 +12192,7 @@ for container in support_vector_machine_performance_comparison_F1_plot.container
 
 
     
-![png](output_325_0.png)
+![png](output_315_0.png)
     
 
 
@@ -12489,13 +12223,11 @@ plt.show()
 
 
     
-![png](output_326_0.png)
+![png](output_316_0.png)
     
 
 
 #### 1.3.9.2 Logistic Regression <a class="anchor" id="1.3.9.2"></a>
-
-[Logistic Regression](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=360300) models the relationship between the probability of an event (among two outcome levels) by having the log-odds of the event be a linear combination of a set of predictors weighted by their respective parameter estimates. The parameters are estimated via maximum likelihood estimation by testing different values through multiple iterations to optimize for the best fit of log odds. All of these iterations produce the log likelihood function, and logistic regression seeks to maximize this function to find the best parameter estimates. Given the optimal parameters, the conditional probabilities for each observation can be calculated, logged, and summed together to yield a predicted probability.
 
 1. The [logistic regression model](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) from the <mark style="background-color: #CCECFF"><b>sklearn.linear_model</b></mark> Python library API was implemented as a meta-learner for the stacking algorithm. 
 2. The model used default hyperparameters with no tuning applied:
@@ -12582,7 +12314,7 @@ stacked_logistic_regression.fit(X_train_smote, y_train_smote)
 
 
 
-<style>#sk-container-id-2 {color: black;background-color: white;}#sk-container-id-2 pre{padding: 0;}#sk-container-id-2 div.sk-toggleable {background-color: white;}#sk-container-id-2 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-2 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-2 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-2 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-2 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-2 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-2 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-2 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-2 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-2 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-2 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-2 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-2 div.sk-item {position: relative;z-index: 1;}#sk-container-id-2 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-2 div.sk-item::before, #sk-container-id-2 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-2 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-2 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-2 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-2 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-2 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-2 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-2 div.sk-label-container {text-align: center;}#sk-container-id-2 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-2 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>StackingClassifier(estimators=[(&#x27;LR&#x27;,
+<style>#sk-container-id-1 {color: black;background-color: white;}#sk-container-id-1 pre{padding: 0;}#sk-container-id-1 div.sk-toggleable {background-color: white;}#sk-container-id-1 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-1 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-1 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-1 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-1 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-1 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-1 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-1 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-1 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-1 div.sk-item {position: relative;z-index: 1;}#sk-container-id-1 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-1 div.sk-item::before, #sk-container-id-1 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-1 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-1 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-1 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-1 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-1 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-1 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-1 div.sk-label-container {text-align: center;}#sk-container-id-1 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-1 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>StackingClassifier(estimators=[(&#x27;LR&#x27;,
                                 LogisticRegression(max_iter=500, penalty=&#x27;l1&#x27;,
                                                    random_state=88888888,
                                                    solver=&#x27;saga&#x27;)),
@@ -12599,7 +12331,7 @@ stacked_logistic_regression.fit(X_train_smote, y_train_smote)
                                (&#x27;SVM&#x27;,
                                 SVC(kernel=&#x27;linear&#x27;, random_state=88888888))],
                    final_estimator=LogisticRegression(max_iter=500,
-                                                      random_state=88888888))</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox" ><label for="sk-estimator-id-2" class="sk-toggleable__label sk-toggleable__label-arrow">StackingClassifier</label><div class="sk-toggleable__content"><pre>StackingClassifier(estimators=[(&#x27;LR&#x27;,
+                                                      random_state=88888888))</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" ><label for="sk-estimator-id-1" class="sk-toggleable__label sk-toggleable__label-arrow">StackingClassifier</label><div class="sk-toggleable__content"><pre>StackingClassifier(estimators=[(&#x27;LR&#x27;,
                                 LogisticRegression(max_iter=500, penalty=&#x27;l1&#x27;,
                                                    random_state=88888888,
                                                    solver=&#x27;saga&#x27;)),
@@ -12616,10 +12348,10 @@ stacked_logistic_regression.fit(X_train_smote, y_train_smote)
                                (&#x27;SVM&#x27;,
                                 SVC(kernel=&#x27;linear&#x27;, random_state=88888888))],
                    final_estimator=LogisticRegression(max_iter=500,
-                                                      random_state=88888888))</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>LR</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-3" type="checkbox" ><label for="sk-estimator-id-3" class="sk-toggleable__label sk-toggleable__label-arrow">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(max_iter=500, penalty=&#x27;l1&#x27;, random_state=88888888,
-                   solver=&#x27;saga&#x27;)</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>DT</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-4" type="checkbox" ><label for="sk-estimator-id-4" class="sk-toggleable__label sk-toggleable__label-arrow">DecisionTreeClassifier</label><div class="sk-toggleable__content"><pre>DecisionTreeClassifier(criterion=&#x27;entropy&#x27;, max_depth=3, min_samples_leaf=5,
-                       random_state=88888888)</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>RF</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-5" type="checkbox" ><label for="sk-estimator-id-5" class="sk-toggleable__label sk-toggleable__label-arrow">RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(criterion=&#x27;entropy&#x27;, max_depth=7, min_samples_leaf=3,
-                       random_state=88888888)</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>SVM</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-6" type="checkbox" ><label for="sk-estimator-id-6" class="sk-toggleable__label sk-toggleable__label-arrow">SVC</label><div class="sk-toggleable__content"><pre>SVC(kernel=&#x27;linear&#x27;, random_state=88888888)</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>final_estimator</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-7" type="checkbox" ><label for="sk-estimator-id-7" class="sk-toggleable__label sk-toggleable__label-arrow">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(max_iter=500, random_state=88888888)</pre></div></div></div></div></div></div></div></div></div></div></div></div>
+                                                      random_state=88888888))</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>LR</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox" ><label for="sk-estimator-id-2" class="sk-toggleable__label sk-toggleable__label-arrow">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(max_iter=500, penalty=&#x27;l1&#x27;, random_state=88888888,
+                   solver=&#x27;saga&#x27;)</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>DT</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-3" type="checkbox" ><label for="sk-estimator-id-3" class="sk-toggleable__label sk-toggleable__label-arrow">DecisionTreeClassifier</label><div class="sk-toggleable__content"><pre>DecisionTreeClassifier(criterion=&#x27;entropy&#x27;, max_depth=3, min_samples_leaf=5,
+                       random_state=88888888)</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>RF</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-4" type="checkbox" ><label for="sk-estimator-id-4" class="sk-toggleable__label sk-toggleable__label-arrow">RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(criterion=&#x27;entropy&#x27;, max_depth=7, min_samples_leaf=3,
+                       random_state=88888888)</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>SVM</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-5" type="checkbox" ><label for="sk-estimator-id-5" class="sk-toggleable__label sk-toggleable__label-arrow">SVC</label><div class="sk-toggleable__content"><pre>SVC(kernel=&#x27;linear&#x27;, random_state=88888888)</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>final_estimator</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-6" type="checkbox" ><label for="sk-estimator-id-6" class="sk-toggleable__label sk-toggleable__label-arrow">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(max_iter=500, random_state=88888888)</pre></div></div></div></div></div></div></div></div></div></div></div></div>
 
 
 
@@ -13427,7 +13159,7 @@ for container in base_meta_learner_performance_comparison_F1_plot.containers:
 
 
     
-![png](output_341_0.png)
+![png](output_331_0.png)
     
 
 
@@ -13563,7 +13295,7 @@ for container in base_meta_learner_performance_comparison_all_plot.containers:
 
 
     
-![png](output_344_0.png)
+![png](output_334_0.png)
     
 
 
@@ -13597,11 +13329,432 @@ plt.show()
 
 
     
-![png](output_345_0.png)
+![png](output_335_0.png)
     
 
 
 ### 1.3.11 Model Presentation <a class="anchor" id="1.3.11"></a>
+
+#### 1.3.11.1 Shapley Additive Explanations <a class="anchor" id="1.3.11.1"></a>
+
+
+```python
+##################################
+# Reformulating the weighted Logistic Regression model
+# as the final classification model
+# with the optimal hyperparameters
+##################################
+final_model = LogisticRegression(C=1.0,
+                                 class_weight={0: 0.25, 1: 0.75},
+                                 solver='liblinear',
+                                 penalty= 'l2',
+                                 max_iter=500,
+                                 random_state=88888888)
+final_model.fit(X_train, y_train)
+```
+
+
+
+
+<style>#sk-container-id-2 {color: black;background-color: white;}#sk-container-id-2 pre{padding: 0;}#sk-container-id-2 div.sk-toggleable {background-color: white;}#sk-container-id-2 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-2 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-2 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-2 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-2 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-2 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-2 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-2 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-2 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-2 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-2 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-2 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-2 div.sk-item {position: relative;z-index: 1;}#sk-container-id-2 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-2 div.sk-item::before, #sk-container-id-2 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-2 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-2 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-2 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-2 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-2 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-2 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-2 div.sk-label-container {text-align: center;}#sk-container-id-2 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-2 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>LogisticRegression(class_weight={0: 0.25, 1: 0.75}, max_iter=500,
+                   random_state=88888888, solver=&#x27;liblinear&#x27;)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-7" type="checkbox" checked><label for="sk-estimator-id-7" class="sk-toggleable__label sk-toggleable__label-arrow">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(class_weight={0: 0.25, 1: 0.75}, max_iter=500,
+                   random_state=88888888, solver=&#x27;liblinear&#x27;)</pre></div></div></div></div></div>
+
+
+
+
+```python
+##################################
+# Gathering the model coefficients
+# and the estimated log-odds 
+# of the weighted Logistic Regression model
+##################################
+final_model_coefficient = pd.DataFrame(zip(X_train.columns, 
+                                           final_model.coef_[0].tolist(),
+                                           np.exp(final_model.coef_)[0].tolist()),
+                                       columns=['model_predictor','model_coefficient','odds_ratio'])
+display(final_model_coefficient)
+```
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>model_predictor</th>
+      <th>model_coefficient</th>
+      <th>odds_ratio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>URBPOP</td>
+      <td>0.093942</td>
+      <td>1.098496</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>LIFEXP</td>
+      <td>0.472572</td>
+      <td>1.604115</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>TUBINC</td>
+      <td>-0.412017</td>
+      <td>0.662313</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>DTHCMD</td>
+      <td>-0.534044</td>
+      <td>0.586229</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>CO2EMI</td>
+      <td>-0.150646</td>
+      <td>0.860152</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>GDPCAP</td>
+      <td>0.596013</td>
+      <td>1.814868</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>EPISCO</td>
+      <td>1.135875</td>
+      <td>3.113897</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>HDICAT_VH</td>
+      <td>0.268438</td>
+      <td>1.307920</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+```python
+##################################
+# Setting up the primary explainer interface
+# for the SHAP library using the 
+# weighted Logistic Regression model
+##################################
+final_model_explainer = shap.Explainer(final_model, X_train)
+```
+
+
+```python
+##################################
+# Gathering up the SHAP values
+# for the train set
+##################################
+final_model_train_shap_values = final_model_explainer(X_train)
+```
+
+
+```python
+##################################
+# Gathering up the SHAP values
+# for the test set
+##################################
+final_model_test_shap_values = final_model_explainer(X_test)
+```
+
+
+```python
+##################################
+# Formulating the bar plot
+# of the SHAP values using the train set
+# to estimate global feature importance
+##################################
+shap.plots.bar(final_model_train_shap_values, show=False)
+plt.xlim([0, 1])
+plt.show()
+```
+
+
+    
+![png](output_343_0.png)
+    
+
+
+
+```python
+##################################
+# Formulating the bar plot
+# of the SHAP values using the test set
+# to estimate global feature importance
+##################################
+shap.plots.bar(final_model_test_shap_values, show=False)
+plt.xlim([0, 1])
+plt.show()
+```
+
+
+    
+![png](output_344_0.png)
+    
+
+
+
+```python
+##################################
+# Formulating the beeswarm plot
+# of the SHAP values using the train set
+# to estimate the feature impact
+# on model predictions
+##################################
+shap.plots.beeswarm(final_model_train_shap_values, show=False, plot_size=(10, 6))
+plt.xlim([-3, 3])
+plt.show()
+```
+
+
+    
+![png](output_345_0.png)
+    
+
+
+
+```python
+##################################
+# Formulating the beeswarm plot
+# of the SHAP values using the test set
+# to estimate the feature impact
+# on model predictions
+##################################
+shap.plots.beeswarm(final_model_test_shap_values, show=False, plot_size=(10, 6))
+plt.xlim([-3, 3])
+plt.show()
+```
+
+
+    
+![png](output_346_0.png)
+    
+
+
+
+```python
+##################################
+# Formulating the heatmap plot
+# of the SHAP values using the train set
+# to estimate the observation impact
+# on model predictions
+##################################
+shap.plots.heatmap(final_model_train_shap_values)
+```
+
+
+    
+![png](output_347_0.png)
+    
+
+
+
+```python
+##################################
+# Formulating the heatmap plot
+# of the SHAP values using the train set
+# to estimate the observation impact
+# on model predictions
+##################################
+shap.plots.heatmap(final_model_test_shap_values)
+```
+
+
+    
+![png](output_348_0.png)
+    
+
+
+
+```python
+##################################
+# Formulating the dependence plot
+# of the SHAP values using the train set
+# for the most important feature
+# as evaluated to the rest of the features
+##################################
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="GDPCAP")
+```
+
+
+    
+![png](output_349_0.png)
+    
+
+
+
+```python
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="DTHCMD")
+```
+
+
+    
+![png](output_350_0.png)
+    
+
+
+
+```python
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="LIFEXP")
+```
+
+
+    
+![png](output_351_0.png)
+    
+
+
+
+```python
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="TUBINC")
+```
+
+
+    
+![png](output_352_0.png)
+    
+
+
+
+```python
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="CO2EMI")
+```
+
+
+    
+![png](output_353_0.png)
+    
+
+
+
+```python
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="HDICAT_VH")
+```
+
+
+    
+![png](output_354_0.png)
+    
+
+
+
+```python
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="URBPOP")
+```
+
+
+    
+![png](output_355_0.png)
+    
+
+
+
+```python
+##################################
+# Formulating the dependence plot
+# of the SHAP values using the test set
+# for the most important feature
+# as evaluated to the rest of the features
+##################################
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="GDPCAP")
+```
+
+
+    
+![png](output_356_0.png)
+    
+
+
+
+```python
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="DTHCMD")
+```
+
+
+    
+![png](output_357_0.png)
+    
+
+
+
+```python
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="LIFEXP")
+```
+
+
+    
+![png](output_358_0.png)
+    
+
+
+
+```python
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="TUBINC")
+```
+
+
+    
+![png](output_359_0.png)
+    
+
+
+
+```python
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="CO2EMI")
+```
+
+
+    
+![png](output_360_0.png)
+    
+
+
+
+```python
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="HDICAT_VH")
+```
+
+
+    
+![png](output_361_0.png)
+    
+
+
+
+```python
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="URBPOP")
+```
+
+
+    
+![png](output_362_0.png)
+    
+
 
 # 2. Summary <a class="anchor" id="Summary"></a>
 
