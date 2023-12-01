@@ -1,5 +1,5 @@
 ***
-# Supervised Learning : Estimating Cancer Rate Group Probabilities Across Countries Using Classification Algorithms With Class Imbalance Treatment
+# Supervised Learning : Identifying Contributing Factors for Countries With High Cancer Rates Using Classification Algorithms With Class Imbalance Treatment
 
 ***
 ### John Pauline Pineda <br> <br> *December 1, 2023*
@@ -95,7 +95,7 @@ Subsequent analysis and modelling steps involving data understanding, data prepa
 
 ### 1.1.1 Study Objectives <a class="anchor" id="1.1.1"></a>
 
-**The main objective of the study is to develop an interpretable classification model which could provide robust and reliable estimates of cancer rate group probabilities from an optimal set of observations and predictors, while addressing class imbalance and delivering accurate predictions when applied to new unseen data.**
+**The main objective of the study is to develop an interpretable classification model which could provide robust and reliable predictions of belonging to a group of countries with high cancer rates from an optimal set of observations and predictors, while addressing class imbalance and delivering accurate predictions when applied to new unseen data.**
 
 Specific objectives are given as follows:
 
@@ -112,7 +112,7 @@ Specific objectives are given as follows:
 ### 1.1.2 Outcome <a class="anchor" id="1.1.2"></a>
 
 The analysis endpoint for the study is described below:
-* <span style="color: #FF0000">CANRAT</span> (categorical): **Dichotomized category based on age-standardized cancer rates**, per 100K population (2022)
+* <span style="color: #FF0000">CANRAT</span> (categorical): **Age-standardized cancer rates of countries dichotomized to two categories pertaining to those classified in the upper 25th percentile and lower 75th percentile**, per 100K population (2022)
 
 
 ### 1.1.3 Predictors <a class="anchor" id="1.1.2"></a>
@@ -13823,7 +13823,7 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 # 2. Summary <a class="anchor" id="Summary"></a>
 
 
-**A logistic regression model applied with L2 regularization and class weights provided a set of robust and reliable probability estimates for countries belonging to the high cancer rate group – predominantly characterized by factors related to social development, economic, healthcare delivery and environmental factors. The key drivers identified for high cancer rate levels ranked by feature importance with their conditioned effects indicated were given as follows:**
+**A logistic regression model applied with L2 regularization and class weights provided a set of robust and reliable predictions for countries belonging to the high cancer rate group – predominantly characterized by factors related to social development, economic, healthcare delivery and environmental factors. The key drivers identified for high cancer rate levels ranked by feature importance with their conditioned effects indicated were given as follows:**
 * **Environmental protection index (+)**
 * **GDP per capita (+)**
 * **Death by communicable disease (-)**
@@ -13844,17 +13844,17 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 * Post-hoc exploration of the model results involved model-specific (**Odds Ratios**) and model-agnostic (**Shapley Additive Explanations**) methods. Both methods were consistent in ranking **Environmental protection index**, **GDP per capita**, **Death by communicable disease**, **Life expectancy**, **Tuberculosis incidence**, **Human development index**, **CO2 emission** and **Urban population** as the most important features by importance. These results helped provide insights on the significance, contribution and effect of the various predictors to model prediction.
 
 
-![Cancer_Rate_Category_Summary_1.png](attachment:516a0e4e-d0b2-443b-90fd-63244c15ebf5.png)
+![CaseStudy2_Summary_1.png](attachment:a6c86573-272b-452e-8fa4-681fc7d97d23.png)
 
-![Cancer_Rate_Category_Summary_2.png](attachment:e3719b74-105a-44ba-b15d-ba403a7e343e.png)
+![CaseStudy2_Summary_2.png](attachment:79166c54-f7ef-4c69-9104-7359cb1f8b17.png)
 
-![Cancer_Rate_Category_Summary_3.png](attachment:4868d881-8564-4c15-8167-87dba30665be.png)
+![CaseStudy2_Summary_3.png](attachment:5bc85057-a638-450c-9a80-0a190432f28d.png)
 
-![Cancer_Rate_Category_Summary_4.png](attachment:7a2003de-6f76-4cce-bd95-5c2b56603336.png)
+![CaseStudy2_Summary_4.png](attachment:ba81a0d4-26d3-42a6-87c0-66a626192de2.png)
 
-![Cancer_Rate_Category_Summary_5.png](attachment:226c5340-56b7-4ac0-9cf4-3d560cb6fcf5.png)
+![CaseStudy2_Summary_5.png](attachment:a3adb7cd-d2f0-4f79-bd79-29efa1af95f6.png)
 
-![Cancer_Rate_Category_Summary_6.png](attachment:b1580976-c523-46ae-be67-5809a07c2e03.png)
+![CaseStudy2_Summary_6.png](attachment:c1ec8d42-4de9-4aae-94cd-305e2b6ca3cc.png)
 
 # 3. References <a class="anchor" id="References"></a>
 
@@ -13867,6 +13867,7 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 * **[Book]** [Data Wrangling with Python](https://www.oreilly.com/library/view/data-wrangling-with/9781491948804/) by Jacqueline Kazil and Katharine Jarmul
 * **[Book]** [Regression Modeling Strategies](https://link.springer.com/book/10.1007/978-1-4757-3462-1) by Frank Harrell
 * **[Book]** [Ensemble Methods for Machine Learning](https://www.manning.com/books/ensemble-methods-for-machine-learning) by Gautam Kunapuli
+* **[Book]** [Imbalanced Classification with Python: Better Metrics, Balance Skewed Classes, Cost-Sensitive Learning](https://machinelearningmastery.com/imbalanced-classification-with-python/) by Jason Brownlee
 * **[Python Library API]** [NumPy](https://numpy.org/doc/) by NumPy Team
 * **[Python Library API]** [pandas](https://pandas.pydata.org/docs/) by Pandas Team
 * **[Python Library API]** [seaborn](https://seaborn.pydata.org/) by Seaborn Team
@@ -13922,6 +13923,30 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 * **[Article]** [Hypothesis Testing with Python: Step by Step Hands-On Tutorial with Practical Examples](https://towardsdatascience.com/hypothesis-testing-with-python-step-by-step-hands-on-tutorial-with-practical-examples-e805975ea96e) by Ece Işık Polat (Towards Data Science)
 * **[Article]** [17 Statistical Hypothesis Tests in Python (Cheat Sheet)](https://machinelearningmastery.com/statistical-hypothesis-tests-in-python-cheat-sheet/) by Jason Brownlee (Machine Learning Mastery)
 * **[Article]** [A Step-by-Step Guide to Hypothesis Testing in Python using Scipy](https://medium.com/@gabriel_renno/a-step-by-step-guide-to-hypothesis-testing-in-python-using-scipy-8eb5b696ab07) by Gabriel Rennó (Medium)
+* **[Article]** [How to Evaluate Classification Models in Python: A Beginner's Guide](https://builtin.com/data-science/evaluating-classification-models) by Sadrach Pierre (BuiltIn)
+* **[Article]** [Machine Learning Classifiers Comparison with Python](https://towardsdatascience.com/machine-learning-classifiers-comparison-with-python-33149aecdbca) by Roberto Salazar (Towards Data Science)
+* **[Article]** [Top 6 Machine Learning Algorithms for Classification](https://towardsdatascience.com/top-machine-learning-algorithms-for-classification-2197870ff501) by Destin Gong (Towards Data Science)
+* **[Article]** [Metrics For Evaluating Machine Learning Classification Models](https://towardsdatascience.com/metrics-for-evaluating-machine-learning-classification-models-python-example-59b905e079a5) by Cory Maklin (Towards Data Science)
+* **[Article]** [Evaluation Metrics for Classification Problems with Implementation in Python](https://medium.com/analytics-vidhya/evaluation-metrics-for-classification-problems-with-implementation-in-python-a20193b4f2c3) by Venu Gopal Kadamba (Medium)
+* **[Article]** [Tour of Evaluation Metrics for Imbalanced Classification](https://machinelearningmastery.com/tour-of-evaluation-metrics-for-imbalanced-classification/) by Jason Brownlee (Machine Learning Mastery)
+* **[Article]** [Metrics To Evaluate Machine Learning Algorithms in Python](https://machinelearningmastery.com/metrics-evaluate-machine-learning-algorithms-python/) by Jason Brownlee (Machine Learning Mastery)
+* **[Article]** [How To Compare Machine Learning Algorithms in Python with scikit-learn](https://machinelearningmastery.com/compare-machine-learning-algorithms-python-scikit-learn/) by Jason Brownlee (Machine Learning Mastery)
+* **[Article]** [How to Deal With Imbalanced Classification and Regression Data](https://neptune.ai/blog/how-to-deal-with-imbalanced-classification-and-regression-data) by Prince Canuma (Neptune.AI)
+* **[Article]** [Random Oversampling and Undersampling for Imbalanced Classification](https://machinelearningmastery.com/random-oversampling-and-undersampling-for-imbalanced-classification/) by Jason Brownlee (Machine Learning Mastery)
+* **[Article]** [How to Handle Imbalance Data and Small Training Sets in ML](https://towardsdatascience.com/how-to-handle-imbalance-data-and-small-training-sets-in-ml-989f8053531d) by Ege Hosgungor (Towards Data Science)
+* **[Article]** [Class Imbalance Strategies — A Visual Guide with Code](https://towardsdatascience.com/class-imbalance-strategies-a-visual-guide-with-code-8bc8fae71e1a) by Travis Tang (Towards Data Science)
+* **[Article]** [Machine Learning: How to Handle Class Imbalance](https://medium.com/analytics-vidhya/machine-learning-how-to-handle-class-imbalance-920e48c3e970) by Ken Hoffman (Medium)
+* **[Article]** [Handling Class Imbalance in Machine Learning](https://medium.com/mlearning-ai/handling-class-imbalance-in-machine-learning-cb1473e825ce) by Okan Yenigün (Medium)
+* **[Article]** [Undersampling Algorithms for Imbalanced Classification](https://machinelearningmastery.com/undersampling-algorithms-for-imbalanced-classification/) by Jason Brownlee (Machine Learning Mastery)
+* **[Article]** [Condensed Nearest Neighbor Rule Undersampling (CNN) & TomekLinks](https://bobrupakroy.medium.com/condensed-nearest-neighbor-rule-undersampling-cnn-380c0d84ca88) by Rupak Roy (Medium)
+* **[Article]** [CNN (Condensed Nearest Neighbors)](https://abhic159.medium.com/cnn-condensed-nearest-neighbors-3261bd0c39fb) by Abhishek (Medium)
+* **[Article]** [Synthetic Minority Over-sampling TEchnique (SMOTE)](https://medium.com/@corymaklin/synthetic-minority-over-sampling-technique-smote-7d419696b88c) by Cory Maklin (Medium)
+* **[Article]** [SMOTE for Imbalanced Classification with Python](https://www.analyticsvidhya.com/blog/2020/10/overcoming-class-imbalance-using-smote-techniques/) by Swastik Satpathy (Analytics Vidhya)
+* **[Article]** [An Introduction to SMOTE](https://www.kdnuggets.com/2022/11/introduction-smote.html#:~:text=SMOTE%20(Synthetic%20Minority%20Oversampling%20Technique)%20is%20an%20oversampling%20method%20of,a%20point%20along%20that%20line.) by Abid Ali Awan (KD Nuggets)
+* **[Article]** [A Comprehensive Guide to Ensemble Learning (with Python codes)](https://www.analyticsvidhya.com/blog/2018/06/comprehensive-guide-for-ensemble-models/) by Aishwarya Singh (Analytics Vidhya)
+* **[Article]** [Stacked Ensembles — Improving Model Performance on a Higher Level](https://towardsdatascience.com/stacked-ensembles-improving-model-performance-on-a-higher-level-99ffc4ea5523) by Yenwee Lim (Towards Data Science)
+* **[Article]** [Stacking to Improve Model Performance: A Comprehensive Guide on Ensemble Learning in Python](https://medium.com/@brijesh_soni/stacking-to-improve-model-performance-a-comprehensive-guide-on-ensemble-learning-in-python-9ed53c93ce28) by Brijesh Soni (Medium)
+* **[Article]** [Stacking Ensemble Machine Learning With Python](https://machinelearningmastery.com/stacking-ensemble-machine-learning-with-python/) by Jason Brownlee (Machine Learning Mastery)
 * **[Publication]** [Data Quality for Machine Learning Tasks](https://journals.sagepub.com/doi/10.1177/0962280206074463) by Nitin Gupta, Shashank Mujumdar, Hima Patel, Satoshi Masuda, Naveen Panwar, Sambaran Bandyopadhyay, Sameep Mehta, Shanmukha Guttula, Shazia Afzal, Ruhi Sharma Mittal and Vitobha Munigala (KDD ’21: Proceedings of the 27th ACM SIGKDD Conference on Knowledge Discovery & Data Mining)
 * **[Publication]** [Overview and Importance of Data Quality for Machine Learning Tasks](https://dl.acm.org/doi/10.1145/3394486.3406477) by Abhinav Jain, Hima Patel, Lokesh Nagalapatti, Nitin Gupta, Sameep Mehta, Shanmukha Guttula, Shashank Mujumdar, Shazia Afzal, Ruhi Sharma Mittal and Vitobha Munigala (KDD ’20: Proceedings of the 26th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining)
 * **[Publication]** [Multiple Imputation of Discrete and Continuous Data by Fully Conditional Specification](https://journals.sagepub.com/doi/10.1177/0962280206074463) by Stef van Buuren (Statistical Methods in Medical Research)
