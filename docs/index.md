@@ -5534,7 +5534,9 @@ display(cancer_rate_premodelling.dtypes)
 ##################################
 # Gathering the pairplot for all variables
 ##################################
-sns.pairplot(cancer_rate_premodelling, kind='reg')
+sns.pairplot(cancer_rate_preprocessed_combined,
+             kind='reg',
+             hue='CANRAT');
 plt.show()
 ```
 
@@ -6740,7 +6742,9 @@ display(cancer_rate_premodelling.dtypes)
 ##################################
 # Gathering the pairplot for all variables
 ##################################
-sns.pairplot(cancer_rate_premodelling, kind='reg')
+sns.pairplot(cancer_rate_preprocessed_combined,
+             kind='reg',
+             hue='CANRAT');
 plt.show()
 ```
 
@@ -7949,7 +7953,9 @@ display(cancer_rate_premodelling.dtypes)
 ##################################
 # Gathering the pairplot for all variables
 ##################################
-sns.pairplot(cancer_rate_premodelling, kind='reg')
+sns.pairplot(cancer_rate_preprocessed_combined,
+             kind='reg',
+             hue='CANRAT');
 plt.show()
 ```
 
@@ -9199,7 +9205,9 @@ display(cancer_rate_premodelling.dtypes)
 ##################################
 # Gathering the pairplot for all variables
 ##################################
-sns.pairplot(cancer_rate_premodelling, kind='reg')
+sns.pairplot(cancer_rate_preprocessed_combined,
+             kind='reg',
+             hue='CANRAT');
 plt.show()
 ```
 
