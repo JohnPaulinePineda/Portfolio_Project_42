@@ -158,7 +158,7 @@ Preliminary data used in the study was evaluated and prepared for analysis and m
 [Yeo-Johnson Transformation](https://academic.oup.com/biomet/article-abstract/87/4/954/232908?redirectedFrom=fulltext&login=false) applies a new family of distributions that can be used without restrictions, extending many of the good properties of the Box-Cox power family. Similar to the Box-Cox transformation, the method also estimates the optimal value of lambda but has the ability to transform both positive and negative values by inflating low variance data and deflating high variance data to create a more uniform data set. While there are no restrictions in terms of the applicable values, the interpretability of the transformed values is more diminished as compared to the other methods.
 
 
-### 1.2.2 Feature Selection <a class="anchor" id="1.2.1"></a>
+### 1.2.2 Feature Selection <a class="anchor" id="1.2.2"></a>
 
 Statistical test measures were assessed for the numeric and categorical predictors in the study to determine the most optimal subset of variables for the subsequent modelling process which included the following:
 
@@ -218,7 +218,7 @@ The predictive performance of the formulated classification models in the study 
 [AUROC](https://link.springer.com/book/10.1007/978-1-4614-6849-3?page=1) measures the area under the receiver operating characteristic curve, which illustrates the trade-off between true positive rate (sensitivity) and false positive rate at various classification thresholds. It provides a comprehensive evaluation of the model's ability to discriminate between classes and is robust to imbalanced datasets. Compared to other metrics, it may not be as directly interpretable as well as not being sensitive to class distribution changes.
 
 
-### 1.2.6 Model Presentation <a class="anchor" id="1.2.1"></a>
+### 1.2.6 Model Presentation <a class="anchor" id="1.2.6"></a>
 
 Model presentation was conducted post-hoc and focused on both model-specific and model-agnostic techniques which did not consider any assumptions about the model structures. These methods were described as follows:
 
@@ -3099,7 +3099,7 @@ len(categorical_column_quality_summary[(categorical_column_quality_summary['Uniq
 ### 1.3.3. Data Preprocessing <a class="anchor" id="1.3.3"></a>
 
 
-#### 1.3.3.1 Data Cleaning <a class="anchor" id="1.3.1.1"></a>
+#### 1.3.3.1 Data Cleaning <a class="anchor" id="1.3.3.1"></a>
 
 1. Subsets of rows and columns with high rates of missing data were removed from the dataset:
     * 4 variables with Fill.Rate<0.9 were excluded for subsequent analysis.
@@ -9364,7 +9364,7 @@ def model_performance_evaluation(y_true, y_pred):
     return(metric_summary)
 ```
 
-#### 1.3.8.2 Logistic Regression <a class="anchor" id="1.3.9.2"></a>
+#### 1.3.8.2 Logistic Regression <a class="anchor" id="1.3.8.2"></a>
 
 1. The [logistic regression model](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) from the <mark style="background-color: #CCECFF"><b>sklearn.linear_model</b></mark> Python library API was implemented. 
 2. The model contains 5 hyperparameters:
