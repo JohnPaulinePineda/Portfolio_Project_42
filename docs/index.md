@@ -13852,17 +13852,17 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 * Post-hoc exploration of the model results involved model-specific (**Odds Ratios**) and model-agnostic (**Shapley Additive Explanations**) methods. Both methods were consistent in ranking **Environmental protection index**, **GDP per capita**, **Death by communicable disease**, **Life expectancy**, **Tuberculosis incidence**, **Human development index**, **CO2 emission** and **Urban population** as the most important features by importance. These results helped provide insights on the significance, contribution and effect of the various predictors to model prediction.
 
 
-![CaseStudy2_Summary_1.png](attachment:a6c86573-272b-452e-8fa4-681fc7d97d23.png)
+![CaseStudy3_Summary_1.png](attachment:9d480dcb-fb68-4c51-ad77-b5f39e00c0c4.png)
 
-![CaseStudy2_Summary_2.png](attachment:79166c54-f7ef-4c69-9104-7359cb1f8b17.png)
+![CaseStudy3_Summary_2.png](attachment:75746d59-8b08-45fd-a9f9-afb4051430c1.png)
 
-![CaseStudy2_Summary_3.png](attachment:5bc85057-a638-450c-9a80-0a190432f28d.png)
+![CaseStudy3_Summary_3.png](attachment:5037323b-9031-4187-a481-dbd1ab2aea2d.png)
 
-![CaseStudy2_Summary_4.png](attachment:ba81a0d4-26d3-42a6-87c0-66a626192de2.png)
+![CaseStudy3_Summary_4.png](attachment:c2627d22-2354-4c5a-a5a3-80abb967a404.png)
 
-![CaseStudy2_Summary_5.png](attachment:a3adb7cd-d2f0-4f79-bd79-29efa1af95f6.png)
+![CaseStudy3_Summary_5.png](attachment:aa215b7d-001e-4a03-8de3-c13d7fca8363.png)
 
-![CaseStudy2_Summary_6.png](attachment:c1ec8d42-4de9-4aae-94cd-305e2b6ca3cc.png)
+![CaseStudy3_Summary_6.png](attachment:6aaf1c22-d2eb-4a60-b869-881e5d4e8674.png)
 
 # 3. References <a class="anchor" id="References"></a>
 
