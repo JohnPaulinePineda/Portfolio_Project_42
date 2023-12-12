@@ -171,6 +171,8 @@ Statistical test measures were assessed for the numeric and categorical predicto
 
 ### 1.2.3 Model Formulation <a class="anchor" id="1.2.3"></a>
 
+[Machine Learning Classification Models](http://appliedpredictivemodeling.com/) are algorithms that learn to assign predefined categories or labels to input data based on patterns and relationships identified during the training phase. Classification is a supervised learning task, meaning the models are trained on a labeled dataset where the correct output (class or label) is known for each input. Once trained, these models can predict the class of new, unseen instances.
+
 This study implemented both glass-box and black-box classification modelling procedures with simple to complex structures involving moderate to large numbers of model coefficients or mathematical transformations which lacked transparency in terms of the internal processes and weighted factors used in reaching a decision. Models applied in the analysis for predicting the categorical target were the following:
 
 [Logistic Regression](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=360300) models the relationship between the probability of an event (among two outcome levels) by having the log-odds of the event be a linear combination of a set of predictors weighted by their respective parameter estimates. The parameters are estimated via maximum likelihood estimation by testing different values through multiple iterations to optimize for the best fit of log odds. All of these iterations produce the log likelihood function, and logistic regression seeks to maximize this function to find the best parameter estimates. Given the optimal parameters, the conditional probabilities for each observation can be calculated, logged, and summed together to yield a predicted probability.
@@ -5534,9 +5536,14 @@ display(cancer_rate_premodelling.dtypes)
 ##################################
 # Gathering the pairplot for all variables
 ##################################
-sns.pairplot(cancer_rate_premodelling,
-             kind='reg',
-             hue='CANRAT');
+cancer_rate_predictor_pair_plot = sns.pairplot(cancer_rate_premodelling,
+                                               kind='reg',
+                                               markers=["o", "s"],
+                                               plot_kws={'scatter_kws': {'alpha': 0.3}},
+                                               hue='CANRAT');
+sns.move_legend(cancer_rate_predictor_pair_plot, 
+                "lower center",
+                bbox_to_anchor=(.5, 1), ncol=2, title='CANRAT', frameon=False)
 plt.show()
 ```
 
@@ -6742,9 +6749,14 @@ display(cancer_rate_premodelling.dtypes)
 ##################################
 # Gathering the pairplot for all variables
 ##################################
-sns.pairplot(cancer_rate_premodelling,
-             kind='reg',
-             hue='CANRAT');
+cancer_rate_predictor_pair_plot = sns.pairplot(cancer_rate_premodelling,
+                                               kind='reg',
+                                               markers=["o", "s"],
+                                               plot_kws={'scatter_kws': {'alpha': 0.3}},
+                                               hue='CANRAT');
+sns.move_legend(cancer_rate_predictor_pair_plot, 
+                "lower center",
+                bbox_to_anchor=(.5, 1), ncol=2, title='CANRAT', frameon=False)
 plt.show()
 ```
 
@@ -7953,9 +7965,14 @@ display(cancer_rate_premodelling.dtypes)
 ##################################
 # Gathering the pairplot for all variables
 ##################################
-sns.pairplot(cancer_rate_premodelling,
-             kind='reg',
-             hue='CANRAT');
+cancer_rate_predictor_pair_plot = sns.pairplot(cancer_rate_premodelling,
+                                               kind='reg',
+                                               markers=["o", "s"],
+                                               plot_kws={'scatter_kws': {'alpha': 0.3}},
+                                               hue='CANRAT');
+sns.move_legend(cancer_rate_predictor_pair_plot, 
+                "lower center",
+                bbox_to_anchor=(.5, 1), ncol=2, title='CANRAT', frameon=False)
 plt.show()
 ```
 
@@ -9205,9 +9222,14 @@ display(cancer_rate_premodelling.dtypes)
 ##################################
 # Gathering the pairplot for all variables
 ##################################
-sns.pairplot(cancer_rate_premodelling,
-             kind='reg',
-             hue='CANRAT');
+cancer_rate_predictor_pair_plot = sns.pairplot(cancer_rate_premodelling,
+                                               kind='reg',
+                                               markers=["o", "s"],
+                                               plot_kws={'scatter_kws': {'alpha': 0.3}},
+                                               hue='CANRAT');
+sns.move_legend(cancer_rate_predictor_pair_plot, 
+                "lower center",
+                bbox_to_anchor=(.5, 1), ncol=2, title='CANRAT', frameon=False)
 plt.show()
 ```
 
@@ -10840,7 +10862,7 @@ logistic_regression_performance_comparison_F1_plot.set_ylabel("Logistic Regressi
 logistic_regression_performance_comparison_F1_plot.grid(False)
 logistic_regression_performance_comparison_F1_plot.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
 for container in logistic_regression_performance_comparison_F1_plot.containers:
-    logistic_regression_performance_comparison_F1_plot.bar_label(container, fmt='%.5f', padding=-50)
+    logistic_regression_performance_comparison_F1_plot.bar_label(container, fmt='%.5f', padding=-50, color='white', fontweight='bold')
 ```
 
 
@@ -11305,7 +11327,7 @@ decision_tree_performance_comparison_F1_plot.set_ylabel("Decision Tree Model")
 decision_tree_performance_comparison_F1_plot.grid(False)
 decision_tree_performance_comparison_F1_plot.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
 for container in decision_tree_performance_comparison_F1_plot.containers:
-    decision_tree_performance_comparison_F1_plot.bar_label(container, fmt='%.5f', padding=-50)
+    decision_tree_performance_comparison_F1_plot.bar_label(container, fmt='%.5f', padding=-50, color='white', fontweight='bold')
 ```
 
 
@@ -11770,7 +11792,7 @@ random_forest_performance_comparison_F1_plot.set_ylabel("Random Forest Model")
 random_forest_performance_comparison_F1_plot.grid(False)
 random_forest_performance_comparison_F1_plot.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
 for container in random_forest_performance_comparison_F1_plot.containers:
-    random_forest_performance_comparison_F1_plot.bar_label(container, fmt='%.5f', padding=-50)
+    random_forest_performance_comparison_F1_plot.bar_label(container, fmt='%.5f', padding=-50, color='white', fontweight='bold')
 ```
 
 
@@ -12235,7 +12257,7 @@ support_vector_machine_performance_comparison_F1_plot.set_ylabel("Support Vector
 support_vector_machine_performance_comparison_F1_plot.grid(False)
 support_vector_machine_performance_comparison_F1_plot.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
 for container in support_vector_machine_performance_comparison_F1_plot.containers:
-    support_vector_machine_performance_comparison_F1_plot.bar_label(container, fmt='%.5f', padding=-50)
+    support_vector_machine_performance_comparison_F1_plot.bar_label(container, fmt='%.5f', padding=-50, color='white', fontweight='bold')
 ```
 
 
@@ -13202,7 +13224,7 @@ base_meta_learner_performance_comparison_F1_plot.set_ylabel("Base and Meta Learn
 base_meta_learner_performance_comparison_F1_plot.grid(False)
 base_meta_learner_performance_comparison_F1_plot.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
 for container in base_meta_learner_performance_comparison_F1_plot.containers:
-    base_meta_learner_performance_comparison_F1_plot.bar_label(container, fmt='%.5f', padding=-50)
+    base_meta_learner_performance_comparison_F1_plot.bar_label(container, fmt='%.5f', padding=-50, color='white', fontweight='bold')
 ```
 
 
@@ -13338,7 +13360,7 @@ base_meta_learner_performance_comparison_all_plot.set_ylabel("Base and Meta Lear
 base_meta_learner_performance_comparison_all_plot.grid(False)
 base_meta_learner_performance_comparison_all_plot.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
 for container in base_meta_learner_performance_comparison_all_plot.containers:
-    base_meta_learner_performance_comparison_all_plot.bar_label(container, fmt='%.5f', padding=-50)
+    base_meta_learner_performance_comparison_all_plot.bar_label(container, fmt='%.5f', padding=-50, color='white', fontweight='bold')
 ```
 
 
