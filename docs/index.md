@@ -115,7 +115,7 @@ The analysis endpoint for the study is described below:
 * <span style="color: #FF0000">CANRAT</span> (categorical): **Age-standardized cancer rates of countries dichotomized to two categories pertaining to those classified in the upper 25th percentile and lower 75th percentile**, per 100K population (2022)
 
 
-### 1.1.3 Predictors <a class="anchor" id="1.1.2"></a>
+### 1.1.3 Predictors <a class="anchor" id="1.1.3"></a>
 
 Detailed descriptions for each individual predictor used in the study are provided as follows:
 * <span style="color: #FF0000">GDPPER</span> (numeric): **GDP per person employed**, current US Dollars (2020)
@@ -13990,6 +13990,9 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 * **[Publication]** [A Training Algorithm for Optimal Margin Classifiers](https://dl.acm.org/doi/10.1145/130385.130401) by Bernhard Boser, Isabelle Guyon and Vladimir Vapnik (Proceedings of the Fifth Annual Workshop on Computational Learning Theory)
 * **[Publication]** [SMOTE: Synthetic Minority Over-Sampling Technique](https://dl.acm.org/doi/10.5555/1622407.1622416) by Nitesh Chawla, Kevin Bowyer, Lawrence Hall and Philip Kegelmeyer (Journal of Artificial Intelligence Research)
 * **[Publication]** [The Condensed Nearest Neighbor Rule](https://ieeexplore.ieee.org/document/1054155) by Peter Hart (IEEE Transactions on Information Theory)
+* **[Course]** [IBM Data Analyst Professional Certificate](https://www.coursera.org/professional-certificates/ibm-data-analyst) by IBM Team (Coursera)
+* **[Course]** [IBM Data Science Professional Certificate](https://www.coursera.org/professional-certificates/ibm-data-science) by IBM Team (Coursera)
+* **[Course]** [IBM Machine Learning Professional Certificate](https://www.coursera.org/professional-certificates/ibm-machine-learning) by IBM Team (Coursera)
 
 ***
 
