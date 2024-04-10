@@ -13873,6 +13873,12 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 
 * Post-hoc exploration of the model results involved model-specific (**Odds Ratios**) and model-agnostic (**Shapley Additive Explanations**) methods. Both methods were consistent in ranking **Environmental protection index**, **GDP per capita**, **Death by communicable disease**, **Life expectancy**, **Tuberculosis incidence**, **Human development index**, **CO2 emission** and **Urban population** as the most important features by importance. These results helped provide insights on the significance, contribution and effect of the various predictors to model prediction.
 
+**The current results have limitations which can be further addressed by extending the study to include the following actions:**
+* Applying adjustments to the classification thresholds by accounting for the class imbalance ratio when maximizing precision and/or recall
+* Performing sensitivity analysis by testing the model's performance across multiple thresholds
+* Incorporating costs associated with false positives and false negatives by considering the relative importance of different types of errors
+* Exploring other oversampling (Adasyn, Borderline SMOTE, K-Means SMOTE) and undersampling (NearMiss, Tomek Links, ENN) techniques to address class imbalance
+* Experimenting with combining resampling techniques with algorithmic approaches that handle class imbalance internally including bagging and boosting ensembles
 
 ![CaseStudy3_Summary_1.png](attachment:9d480dcb-fb68-4c51-ad77-b5f39e00c0c4.png)
 
