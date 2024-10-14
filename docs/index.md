@@ -2,7 +2,7 @@
 # Supervised Learning : Identifying Contributing Factors for Countries With High Cancer Rates Using Classification Algorithms With Class Imbalance Treatment
 
 ***
-### John Pauline Pineda <br> <br> *December 1, 2023*
+### [**John Pauline Pineda**](https://github.com/JohnPaulinePineda) <br> <br> *December 1, 2023*
 ***
 
 * [**1. Table of Contents**](#TOC)
@@ -266,22 +266,6 @@ Model presentation was conducted post-hoc and focused on both model-specific and
 
 ```python
 ##################################
-# Setting up compatibility issues
-# between the scikit-learn and imblearn packages
-##################################
-# !pip uninstall scikit-learn --yes
-# !pip uninstall imblearn --yes
-# !pip install scikit-learn==1.2.2
-# !pip install imblearn
-##################################
-# Installing shap package
-##################################
-# !pip install shap
-```
-
-
-```python
-##################################
 # Loading Python Libraries
 ##################################
 import numpy as np
@@ -289,34 +273,53 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import itertools
+import os
 %matplotlib inline
-import shap
 
 from operator import add,mul,truediv
-from sklearn.experimental import enable_iterative_imputer
-from sklearn.impute import IterativeImputer
-from sklearn.linear_model import LinearRegression
-from sklearn.preprocessing import PowerTransformer
-from sklearn.preprocessing import StandardScaler
-from scipy import stats
 
-from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, confusion_matrix, ConfusionMatrixDisplay
-from sklearn.model_selection import train_test_split, GridSearchCV
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import CondensedNearestNeighbour
-from sklearn.ensemble import StackingClassifier
+
+from scipy import stats
+
+from sklearn.experimental import enable_iterative_imputer
+from sklearn.impute import IterativeImputer
+from sklearn.preprocessing import PowerTransformer, StandardScaler
+from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier, StackingClassifier
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.model_selection import train_test_split, GridSearchCV 
+
+import shap
+
 ```
 
 
 ```python
 ##################################
-# Loading the dataset
+# Filtering out unncessary warnings
 ##################################
-cancer_rate = pd.read_csv('CategoricalCancerRates.csv')
+import warnings
+warnings.filterwarnings('ignore')
+```
+
+
+```python
+##################################
+# Defining file paths
+##################################
+DATASETS_ORIGINAL_PATH = r"datasets\original"
+```
+
+
+```python
+# Loading the dataset
+# from the DATASETS_ORIGINAL_PATH
+##################################
+cancer_rate = pd.read_csv(os.path.join("..", DATASETS_ORIGINAL_PATH, "CategoricalCancerRates.csv"))
 ```
 
 
@@ -938,11 +941,12 @@ cancer_rate.HDICAT.value_counts(normalize = True)
 
 
 
+    HDICAT
     VH    0.353293
     H     0.233533
     M     0.221557
     L     0.191617
-    Name: HDICAT, dtype: float64
+    Name: proportion, dtype: float64
 
 
 
@@ -957,9 +961,10 @@ cancer_rate.CANRAT.value_counts(normalize = True)
 
 
 
+    CANRAT
     Low     0.745763
     High    0.254237
-    Name: CANRAT, dtype: float64
+    Name: proportion, dtype: float64
 
 
 
@@ -1024,7 +1029,7 @@ cancer_rate.duplicated().sum()
 
 
 
-    0
+    np.int64(0)
 
 
 
@@ -1418,15 +1423,6 @@ display(all_column_quality_summary[(all_column_quality_summary['Fill.Rate']<1)].
       <td>0.864407</td>
     </tr>
     <tr>
-      <th>2</th>
-      <td>GDPPER</td>
-      <td>float64</td>
-      <td>177</td>
-      <td>165</td>
-      <td>12</td>
-      <td>0.932203</td>
-    </tr>
-    <tr>
       <th>21</th>
       <td>EPISCO</td>
       <td>float64</td>
@@ -1436,13 +1432,13 @@ display(all_column_quality_summary[(all_column_quality_summary['Fill.Rate']<1)].
       <td>0.932203</td>
     </tr>
     <tr>
-      <th>20</th>
-      <td>HDICAT</td>
-      <td>category</td>
+      <th>2</th>
+      <td>GDPPER</td>
+      <td>float64</td>
       <td>177</td>
-      <td>167</td>
-      <td>10</td>
-      <td>0.943503</td>
+      <td>165</td>
+      <td>12</td>
+      <td>0.932203</td>
     </tr>
     <tr>
       <th>16</th>
@@ -1454,8 +1450,17 @@ display(all_column_quality_summary[(all_column_quality_summary['Fill.Rate']<1)].
       <td>0.943503</td>
     </tr>
     <tr>
-      <th>9</th>
-      <td>DTHCMD</td>
+      <th>20</th>
+      <td>HDICAT</td>
+      <td>category</td>
+      <td>177</td>
+      <td>167</td>
+      <td>10</td>
+      <td>0.943503</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>CO2EMI</td>
       <td>float64</td>
       <td>177</td>
       <td>170</td>
@@ -1472,8 +1477,17 @@ display(all_column_quality_summary[(all_column_quality_summary['Fill.Rate']<1)].
       <td>0.960452</td>
     </tr>
     <tr>
-      <th>15</th>
-      <td>CO2EMI</td>
+      <th>11</th>
+      <td>GHGEMI</td>
+      <td>float64</td>
+      <td>177</td>
+      <td>170</td>
+      <td>7</td>
+      <td>0.960452</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>DTHCMD</td>
       <td>float64</td>
       <td>177</td>
       <td>170</td>
@@ -1490,15 +1504,6 @@ display(all_column_quality_summary[(all_column_quality_summary['Fill.Rate']<1)].
       <td>0.960452</td>
     </tr>
     <tr>
-      <th>11</th>
-      <td>GHGEMI</td>
-      <td>float64</td>
-      <td>177</td>
-      <td>170</td>
-      <td>7</td>
-      <td>0.960452</td>
-    </tr>
-    <tr>
       <th>14</th>
       <td>FORARE</td>
       <td>float64</td>
@@ -1508,35 +1513,8 @@ display(all_column_quality_summary[(all_column_quality_summary['Fill.Rate']<1)].
       <td>0.977401</td>
     </tr>
     <tr>
-      <th>8</th>
-      <td>TUBINC</td>
-      <td>float64</td>
-      <td>177</td>
-      <td>174</td>
-      <td>3</td>
-      <td>0.983051</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>AGRLND</td>
-      <td>float64</td>
-      <td>177</td>
-      <td>174</td>
-      <td>3</td>
-      <td>0.983051</td>
-    </tr>
-    <tr>
       <th>6</th>
       <td>POPGRO</td>
-      <td>float64</td>
-      <td>177</td>
-      <td>174</td>
-      <td>3</td>
-      <td>0.983051</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>POPDEN</td>
       <td>float64</td>
       <td>177</td>
       <td>174</td>
@@ -1553,8 +1531,35 @@ display(all_column_quality_summary[(all_column_quality_summary['Fill.Rate']<1)].
       <td>0.983051</td>
     </tr>
     <tr>
+      <th>17</th>
+      <td>POPDEN</td>
+      <td>float64</td>
+      <td>177</td>
+      <td>174</td>
+      <td>3</td>
+      <td>0.983051</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>AGRLND</td>
+      <td>float64</td>
+      <td>177</td>
+      <td>174</td>
+      <td>3</td>
+      <td>0.983051</td>
+    </tr>
+    <tr>
       <th>7</th>
       <td>LIFEXP</td>
+      <td>float64</td>
+      <td>177</td>
+      <td>174</td>
+      <td>3</td>
+      <td>0.983051</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>TUBINC</td>
       <td>float64</td>
       <td>177</td>
       <td>174</td>
@@ -1866,13 +1871,6 @@ display(all_row_quality_summary[(all_row_quality_summary['Missing.Rate']>0.20)].
       <td>0.272727</td>
     </tr>
     <tr>
-      <th>132</th>
-      <td>Somalia</td>
-      <td>22</td>
-      <td>6</td>
-      <td>0.272727</td>
-    </tr>
-    <tr>
       <th>168</th>
       <td>South Sudan</td>
       <td>22</td>
@@ -1880,15 +1878,22 @@ display(all_row_quality_summary[(all_row_quality_summary['Missing.Rate']>0.20)].
       <td>0.272727</td>
     </tr>
     <tr>
-      <th>73</th>
-      <td>Venezuela</td>
+      <th>132</th>
+      <td>Somalia</td>
+      <td>22</td>
+      <td>6</td>
+      <td>0.272727</td>
+    </tr>
+    <tr>
+      <th>117</th>
+      <td>Libya</td>
       <td>22</td>
       <td>5</td>
       <td>0.227273</td>
     </tr>
     <tr>
-      <th>117</th>
-      <td>Libya</td>
+      <th>73</th>
+      <td>Venezuela</td>
       <td>22</td>
       <td>5</td>
       <td>0.227273</td>
@@ -2121,7 +2126,7 @@ display(numeric_column_quality_summary)
       <td>34024.900890</td>
       <td>2.346469e+05</td>
       <td>98380.636010</td>
-      <td>42154.178100</td>
+      <td>77541.764380</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2139,7 +2144,7 @@ display(numeric_column_quality_summary)
       <td>61.701500</td>
       <td>1.000000e+02</td>
       <td>100.000000</td>
-      <td>52.516000</td>
+      <td>86.699000</td>
       <td>2</td>
       <td>1</td>
       <td>2.000000</td>
@@ -2175,7 +2180,7 @@ display(numeric_column_quality_summary)
       <td>0.873660</td>
       <td>5.354510e+00</td>
       <td>1.232440</td>
-      <td>0.962180</td>
+      <td>3.422870</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2193,7 +2198,7 @@ display(numeric_column_quality_summary)
       <td>1.179959</td>
       <td>3.727101e+00</td>
       <td>1.235701</td>
-      <td>1.483129</td>
+      <td>2.204789</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2211,7 +2216,7 @@ display(numeric_column_quality_summary)
       <td>72.464610</td>
       <td>8.456000e+01</td>
       <td>83.200000</td>
-      <td>68.687000</td>
+      <td>82.256098</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2229,7 +2234,7 @@ display(numeric_column_quality_summary)
       <td>44.500000</td>
       <td>5.920000e+02</td>
       <td>12.000000</td>
-      <td>7.200000</td>
+      <td>4.100000</td>
       <td>4</td>
       <td>3</td>
       <td>1.333333</td>
@@ -2247,7 +2252,7 @@ display(numeric_column_quality_summary)
       <td>12.456279</td>
       <td>6.520789e+01</td>
       <td>4.941054</td>
-      <td>42.079403</td>
+      <td>4.354730</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2265,7 +2270,7 @@ display(numeric_column_quality_summary)
       <td>40.386649</td>
       <td>8.084112e+01</td>
       <td>46.252480</td>
-      <td>72.006469</td>
+      <td>38.562911</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2283,7 +2288,7 @@ display(numeric_column_quality_summary)
       <td>41009.275980</td>
       <td>1.294287e+07</td>
       <td>571903.119900</td>
-      <td>3000.932259</td>
+      <td>80158.025830</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2301,7 +2306,7 @@ display(numeric_column_quality_summary)
       <td>32.381668</td>
       <td>1.000000e+02</td>
       <td>100.000000</td>
-      <td>13.637841</td>
+      <td>80.081439</td>
       <td>3</td>
       <td>1</td>
       <td>3.000000</td>
@@ -2319,7 +2324,7 @@ display(numeric_column_quality_summary)
       <td>11118.976025</td>
       <td>1.186285e+06</td>
       <td>131484.763200</td>
-      <td>1326.034028</td>
+      <td>32241.937000</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2337,7 +2342,7 @@ display(numeric_column_quality_summary)
       <td>31.509048</td>
       <td>9.741212e+01</td>
       <td>17.421315</td>
-      <td>8.782159</td>
+      <td>37.570126</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2355,7 +2360,7 @@ display(numeric_column_quality_summary)
       <td>2.298368</td>
       <td>3.172684e+01</td>
       <td>14.772658</td>
-      <td>0.972088</td>
+      <td>6.160799</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2391,7 +2396,7 @@ display(numeric_column_quality_summary)
       <td>77.983133</td>
       <td>7.918951e+03</td>
       <td>3.335312</td>
-      <td>13.300785</td>
+      <td>19.331586</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2409,7 +2414,7 @@ display(numeric_column_quality_summary)
       <td>53.392460</td>
       <td>1.433107e+02</td>
       <td>110.139221</td>
-      <td>45.220661</td>
+      <td>75.734833</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2427,7 +2432,7 @@ display(numeric_column_quality_summary)
       <td>5348.192875</td>
       <td>1.173705e+05</td>
       <td>51722.069000</td>
-      <td>3961.726633</td>
+      <td>41760.594780</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2631,7 +2636,7 @@ display(numeric_column_quality_summary[(numeric_column_quality_summary['Skewness
       <td>77.983133</td>
       <td>7.918951e+03</td>
       <td>3.335312</td>
-      <td>13.300785</td>
+      <td>19.331586</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2649,7 +2654,7 @@ display(numeric_column_quality_summary[(numeric_column_quality_summary['Skewness
       <td>41009.275980</td>
       <td>1.294287e+07</td>
       <td>571903.119900</td>
-      <td>3000.932259</td>
+      <td>80158.025830</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2685,7 +2690,7 @@ display(numeric_column_quality_summary[(numeric_column_quality_summary['Skewness
       <td>11118.976025</td>
       <td>1.186285e+06</td>
       <td>131484.763200</td>
-      <td>1326.034028</td>
+      <td>32241.937000</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2857,7 +2862,7 @@ display(object_column_quality_summary)
       <th>0</th>
       <td>COUNTRY</td>
       <td>Australia</td>
-      <td>Mauritius</td>
+      <td>New Zealand</td>
       <td>1</td>
       <td>1</td>
       <td>1.0</td>
@@ -3795,7 +3800,7 @@ cancer_rate_cleaned_categorical = cancer_rate_cleaned.select_dtypes(include='cat
 # for categorical columns with
 # the most frequent category
 ##################################
-cancer_rate_cleaned_categorical['HDICAT'].fillna(cancer_rate_cleaned_categorical['HDICAT'].mode()[0], inplace=True)
+cancer_rate_cleaned_categorical['HDICAT'] = cancer_rate_cleaned_categorical['HDICAT'].fillna(cancer_rate_cleaned_categorical['HDICAT'].mode()[0])
 cancer_rate_imputed_categorical = cancer_rate_cleaned_categorical.reset_index(drop=True)
 ```
 
@@ -4322,91 +4327,91 @@ for column in cancer_rate_imputed_numeric:
 
 
     
-![png](output_135_0.png)
+![png](output_136_0.png)
     
 
 
 
     
-![png](output_135_1.png)
+![png](output_136_1.png)
     
 
 
 
     
-![png](output_135_2.png)
+![png](output_136_2.png)
     
 
 
 
     
-![png](output_135_3.png)
+![png](output_136_3.png)
     
 
 
 
     
-![png](output_135_4.png)
+![png](output_136_4.png)
     
 
 
 
     
-![png](output_135_5.png)
+![png](output_136_5.png)
     
 
 
 
     
-![png](output_135_6.png)
+![png](output_136_6.png)
     
 
 
 
     
-![png](output_135_7.png)
+![png](output_136_7.png)
     
 
 
 
     
-![png](output_135_8.png)
+![png](output_136_8.png)
     
 
 
 
     
-![png](output_135_9.png)
+![png](output_136_9.png)
     
 
 
 
     
-![png](output_135_10.png)
+![png](output_136_10.png)
     
 
 
 
     
-![png](output_135_11.png)
+![png](output_136_11.png)
     
 
 
 
     
-![png](output_135_12.png)
+![png](output_136_12.png)
     
 
 
 
     
-![png](output_135_13.png)
+![png](output_136_13.png)
     
 
 
 
     
-![png](output_135_14.png)
+![png](output_136_14.png)
     
 
 
@@ -4636,7 +4641,7 @@ plt.show()
 
 
     
-![png](output_140_0.png)
+![png](output_141_0.png)
     
 
 
@@ -4673,7 +4678,7 @@ plot_correlation_matrix(cancer_rate_imputed_numeric_correlation,mask)
 
 
     
-![png](output_142_0.png)
+![png](output_143_0.png)
     
 
 
@@ -4768,79 +4773,79 @@ for column in cancer_rate_transformed_numeric:
 
 
     
-![png](output_148_0.png)
+![png](output_149_0.png)
     
 
 
 
     
-![png](output_148_1.png)
+![png](output_149_1.png)
     
 
 
 
     
-![png](output_148_2.png)
+![png](output_149_2.png)
     
 
 
 
     
-![png](output_148_3.png)
+![png](output_149_3.png)
     
 
 
 
     
-![png](output_148_4.png)
+![png](output_149_4.png)
     
 
 
 
     
-![png](output_148_5.png)
+![png](output_149_5.png)
     
 
 
 
     
-![png](output_148_6.png)
+![png](output_149_6.png)
     
 
 
 
     
-![png](output_148_7.png)
+![png](output_149_7.png)
     
 
 
 
     
-![png](output_148_8.png)
+![png](output_149_8.png)
     
 
 
 
     
-![png](output_148_9.png)
+![png](output_149_9.png)
     
 
 
 
     
-![png](output_148_10.png)
+![png](output_149_10.png)
     
 
 
 
     
-![png](output_148_11.png)
+![png](output_149_11.png)
     
 
 
 
     
-![png](output_148_12.png)
+![png](output_149_12.png)
     
 
 
@@ -4930,73 +4935,73 @@ for column in cancer_rate_scaled_numeric:
 
 
     
-![png](output_154_0.png)
+![png](output_155_0.png)
     
 
 
 
     
-![png](output_154_1.png)
+![png](output_155_1.png)
     
 
 
 
     
-![png](output_154_2.png)
+![png](output_155_2.png)
     
 
 
 
     
-![png](output_154_3.png)
+![png](output_155_3.png)
     
 
 
 
     
-![png](output_154_4.png)
+![png](output_155_4.png)
     
 
 
 
     
-![png](output_154_5.png)
+![png](output_155_5.png)
     
 
 
 
     
-![png](output_154_6.png)
+![png](output_155_6.png)
     
 
 
 
     
-![png](output_154_7.png)
+![png](output_155_7.png)
     
 
 
 
     
-![png](output_154_8.png)
+![png](output_155_8.png)
     
 
 
 
     
-![png](output_154_9.png)
+![png](output_155_9.png)
     
 
 
 
     
-![png](output_154_10.png)
+![png](output_155_10.png)
     
 
 
 
     
-![png](output_154_11.png)
+![png](output_155_11.png)
     
 
 
@@ -5160,7 +5165,7 @@ axes = axes.ravel()
 ##################################
 for i, x_variable in enumerate(x_variables):
     ax = axes[i]
-    ax.boxplot([group[x_variable] for name, group in cancer_rate_preprocessed_combined.groupby(y_variable)])
+    ax.boxplot([group[x_variable] for name, group in cancer_rate_preprocessed_combined.groupby(y_variable, observed=True)])
     ax.set_title(f'{y_variable} Versus {x_variable}')
     ax.set_xlabel(y_variable)
     ax.set_ylabel(x_variable)
@@ -5179,7 +5184,7 @@ plt.show()
 
 
     
-![png](output_166_0.png)
+![png](output_167_0.png)
     
 
 
@@ -5216,7 +5221,7 @@ axes = axes.ravel()
 ##################################
 for i, y_variable in enumerate(y_variables):
     ax = axes[i]
-    category_counts = cancer_rate_preprocessed_categorical_combined.groupby([x_variable, y_variable]).size().unstack(fill_value=0)
+    category_counts = cancer_rate_preprocessed_categorical_combined.groupby([x_variable, y_variable], observed=True).size().unstack(fill_value=0)
     category_proportions = category_counts.div(category_counts.sum(axis=1), axis=0)
     category_proportions.plot(kind='bar', stacked=True, ax=ax)
     ax.set_title(f'{x_variable} Versus {y_variable}')
@@ -5236,7 +5241,7 @@ plt.show()
 
 
     
-![png](output_167_0.png)
+![png](output_168_0.png)
     
 
 
@@ -5527,7 +5532,7 @@ display(cancer_rate_premodelling.dtypes)
     GDPCAP        float64
     EPISCO        float64
     CANRAT       category
-    HDICAT_VH       uint8
+    HDICAT_VH        bool
     dtype: object
 
 
@@ -5549,7 +5554,7 @@ plt.show()
 
 
     
-![png](output_178_0.png)
+![png](output_179_0.png)
     
 
 
@@ -5601,7 +5606,7 @@ y_train.value_counts(normalize = True)
 
     0    0.745614
     1    0.254386
-    dtype: float64
+    Name: proportion, dtype: float64
 
 
 
@@ -5634,7 +5639,7 @@ y_test.value_counts(normalize = True)
 
     0    0.755102
     1    0.244898
-    dtype: float64
+    Name: proportion, dtype: float64
 
 
 
@@ -5966,9 +5971,9 @@ hyperparameter_grid = {
 # Decision Tree model
 ##################################
 optimal_decision_tree = GridSearchCV(estimator = decision_tree, 
-                                           param_grid = hyperparameter_grid,
-                                           n_jobs = -1,
-                                           scoring='f1')
+                                     param_grid = hyperparameter_grid,
+                                     n_jobs = -1,
+                                     scoring='f1')
 
 ##################################
 # Fitting the optimal Decision Tree model
@@ -6226,9 +6231,9 @@ hyperparameter_grid = {
 # Random Forest model
 ##################################
 optimal_random_forest = GridSearchCV(estimator = random_forest, 
-                                           param_grid = hyperparameter_grid,
-                                           n_jobs = -1,
-                                           scoring='f1')
+                                     param_grid = hyperparameter_grid,
+                                     n_jobs = -1,
+                                     scoring='f1')
 
 ##################################
 # Fitting the optimal Random Forest model
@@ -6479,9 +6484,9 @@ hyperparameter_grid = {
 # Support Vector Machine model
 ##################################
 optimal_support_vector_machine = GridSearchCV(estimator = support_vector_machine, 
-                                           param_grid = hyperparameter_grid,
-                                           n_jobs = -1,
-                                           scoring='f1')
+                                              param_grid = hyperparameter_grid,
+                                              n_jobs = -1,
+                                              scoring='f1')
 
 ##################################
 # Fitting the optimal Support Vector Machine model
@@ -6740,7 +6745,7 @@ display(cancer_rate_premodelling.dtypes)
     GDPCAP        float64
     EPISCO        float64
     CANRAT       category
-    HDICAT_VH       uint8
+    HDICAT_VH        bool
     dtype: object
 
 
@@ -6762,7 +6767,7 @@ plt.show()
 
 
     
-![png](output_207_0.png)
+![png](output_208_0.png)
     
 
 
@@ -6814,7 +6819,7 @@ y_train.value_counts(normalize = True)
 
     0    0.745614
     1    0.254386
-    dtype: float64
+    Name: proportion, dtype: float64
 
 
 
@@ -6847,7 +6852,7 @@ y_test.value_counts(normalize = True)
 
     0    0.755102
     1    0.244898
-    dtype: float64
+    Name: proportion, dtype: float64
 
 
 
@@ -6925,7 +6930,6 @@ hyperparameter_grid = {
 ##################################
 weighted_logistic_regression = GridSearchCV(estimator = logistic_regression, 
                                            param_grid = hyperparameter_grid,
-                                           n_jobs = -1,
                                            scoring='f1')
 
 ##################################
@@ -7179,9 +7183,9 @@ hyperparameter_grid = {
 # Decision Tree model
 ##################################
 weighted_decision_tree = GridSearchCV(estimator = decision_tree, 
-                                           param_grid = hyperparameter_grid,
-                                           n_jobs = -1,
-                                           scoring='f1')
+                                      param_grid = hyperparameter_grid,
+                                      n_jobs = -1,
+                                      scoring='f1')
 
 ##################################
 # Fitting the weighted Decision Tree model
@@ -7439,9 +7443,9 @@ hyperparameter_grid = {
 # Random Forest model
 ##################################
 weighted_random_forest = GridSearchCV(estimator = random_forest, 
-                                           param_grid = hyperparameter_grid,
-                                           n_jobs = -1,
-                                           scoring='f1')
+                                      param_grid = hyperparameter_grid,
+                                      n_jobs = -1,
+                                      scoring='f1')
 
 ##################################
 # Fitting the weighted Random Forest model
@@ -7692,9 +7696,9 @@ hyperparameter_grid = {
 # Support Vector Machine model
 ##################################
 weighted_support_vector_machine = GridSearchCV(estimator = support_vector_machine, 
-                                           param_grid = hyperparameter_grid,
-                                           n_jobs = -1,
-                                           scoring='f1')
+                                               param_grid = hyperparameter_grid,
+                                               n_jobs = -1,
+                                               scoring='f1')
 
 ##################################
 # Fitting the weighted Support Vector Machine model
@@ -7956,7 +7960,7 @@ display(cancer_rate_premodelling.dtypes)
     GDPCAP        float64
     EPISCO        float64
     CANRAT       category
-    HDICAT_VH       uint8
+    HDICAT_VH        bool
     dtype: object
 
 
@@ -7978,7 +7982,7 @@ plt.show()
 
 
     
-![png](output_236_0.png)
+![png](output_237_0.png)
     
 
 
@@ -8030,7 +8034,7 @@ y_train.value_counts(normalize = True)
 
     0    0.745614
     1    0.254386
-    dtype: float64
+    Name: proportion, dtype: float64
 
 
 
@@ -8074,7 +8078,7 @@ y_train_smote.value_counts(normalize = True)
 
     0    0.5
     1    0.5
-    dtype: float64
+    Name: proportion, dtype: float64
 
 
 
@@ -8107,7 +8111,7 @@ y_test.value_counts(normalize = True)
 
     0    0.755102
     1    0.244898
-    dtype: float64
+    Name: proportion, dtype: float64
 
 
 
@@ -8184,9 +8188,9 @@ hyperparameter_grid = {
 # Logistic Regression model
 ##################################
 upsampled_logistic_regression = GridSearchCV(estimator = logistic_regression, 
-                                           param_grid = hyperparameter_grid,
-                                           n_jobs = -1,
-                                           scoring='f1')
+                                             param_grid = hyperparameter_grid,
+                                             n_jobs = -1,
+                                             scoring='f1')
 
 ##################################
 # Fitting the upsampled Logistic Regression model
@@ -8439,9 +8443,9 @@ hyperparameter_grid = {
 # Decision Tree model
 ##################################
 upsampled_decision_tree = GridSearchCV(estimator = decision_tree, 
-                                           param_grid = hyperparameter_grid,
-                                           n_jobs = -1,
-                                           scoring='f1')
+                                       param_grid = hyperparameter_grid,
+                                       n_jobs = -1,
+                                       scoring='f1')
 
 ##################################
 # Fitting the upsampled Decision Tree model
@@ -8699,9 +8703,9 @@ hyperparameter_grid = {
 # Random Forest model
 ##################################
 upsampled_random_forest = GridSearchCV(estimator = random_forest, 
-                                           param_grid = hyperparameter_grid,
-                                           n_jobs = -1,
-                                           scoring='f1')
+                                       param_grid = hyperparameter_grid,
+                                       n_jobs = -1,
+                                       scoring='f1')
 
 ##################################
 # Fitting the upsampled Random Forest model
@@ -8720,11 +8724,11 @@ upsampled_random_forest.best_params_
 
 
     {'class_weight': None,
-     'criterion': 'entropy',
-     'max_depth': 7,
+     'criterion': 'gini',
+     'max_depth': 3,
      'max_features': 'sqrt',
      'min_samples_leaf': 3,
-     'n_estimators': 100,
+     'n_estimators': 150,
      'random_state': 88888888}
 
 
@@ -8779,14 +8783,14 @@ display(upsampled_random_forest_performance_train)
     <tr>
       <th>0</th>
       <td>Accuracy</td>
-      <td>0.991228</td>
+      <td>0.973684</td>
       <td>upsampled_random_forest</td>
       <td>train</td>
     </tr>
     <tr>
       <th>1</th>
       <td>Precision</td>
-      <td>0.966667</td>
+      <td>0.906250</td>
       <td>upsampled_random_forest</td>
       <td>train</td>
     </tr>
@@ -8800,14 +8804,14 @@ display(upsampled_random_forest_performance_train)
     <tr>
       <th>3</th>
       <td>F1</td>
-      <td>0.983051</td>
+      <td>0.950820</td>
       <td>upsampled_random_forest</td>
       <td>train</td>
     </tr>
     <tr>
       <th>4</th>
       <td>AUROC</td>
-      <td>0.994118</td>
+      <td>0.982353</td>
       <td>upsampled_random_forest</td>
       <td>train</td>
     </tr>
@@ -8866,35 +8870,35 @@ display(upsampled_random_forest_performance_test)
     <tr>
       <th>0</th>
       <td>Accuracy</td>
-      <td>0.918367</td>
+      <td>0.897959</td>
       <td>upsampled_random_forest</td>
       <td>test</td>
     </tr>
     <tr>
       <th>1</th>
       <td>Precision</td>
-      <td>0.900000</td>
+      <td>0.888889</td>
       <td>upsampled_random_forest</td>
       <td>test</td>
     </tr>
     <tr>
       <th>2</th>
       <td>Recall</td>
-      <td>0.750000</td>
+      <td>0.666667</td>
       <td>upsampled_random_forest</td>
       <td>test</td>
     </tr>
     <tr>
       <th>3</th>
       <td>F1</td>
-      <td>0.818182</td>
+      <td>0.761905</td>
       <td>upsampled_random_forest</td>
       <td>test</td>
     </tr>
     <tr>
       <th>4</th>
       <td>AUROC</td>
-      <td>0.861486</td>
+      <td>0.819820</td>
       <td>upsampled_random_forest</td>
       <td>test</td>
     </tr>
@@ -8952,9 +8956,9 @@ hyperparameter_grid = {
 # Support Vector Machine model
 ##################################
 upsampled_support_vector_machine = GridSearchCV(estimator = support_vector_machine, 
-                                           param_grid = hyperparameter_grid,
-                                           n_jobs = -1,
-                                           scoring='f1')
+                                                param_grid = hyperparameter_grid,
+                                                n_jobs = -1,
+                                                scoring='f1')
 
 ##################################
 # Fitting the upsampled Support Vector Machine model
@@ -9033,28 +9037,28 @@ display(upsampled_support_vector_machine_performance_train)
     <tr>
       <th>1</th>
       <td>Precision</td>
-      <td>0.906250</td>
+      <td>0.933333</td>
       <td>upsampled_support_vector_machine</td>
       <td>train</td>
     </tr>
     <tr>
       <th>2</th>
       <td>Recall</td>
-      <td>1.000000</td>
+      <td>0.965517</td>
       <td>upsampled_support_vector_machine</td>
       <td>train</td>
     </tr>
     <tr>
       <th>3</th>
       <td>F1</td>
-      <td>0.950820</td>
+      <td>0.949153</td>
       <td>upsampled_support_vector_machine</td>
       <td>train</td>
     </tr>
     <tr>
       <th>4</th>
       <td>AUROC</td>
-      <td>0.982353</td>
+      <td>0.970994</td>
       <td>upsampled_support_vector_machine</td>
       <td>train</td>
     </tr>
@@ -9213,7 +9217,7 @@ display(cancer_rate_premodelling.dtypes)
     GDPCAP        float64
     EPISCO        float64
     CANRAT       category
-    HDICAT_VH       uint8
+    HDICAT_VH        bool
     dtype: object
 
 
@@ -9235,7 +9239,7 @@ plt.show()
 
 
     
-![png](output_268_0.png)
+![png](output_269_0.png)
     
 
 
@@ -9287,7 +9291,7 @@ y_train.value_counts(normalize = True)
 
     0    0.745614
     1    0.254386
-    dtype: float64
+    Name: proportion, dtype: float64
 
 
 
@@ -9331,7 +9335,7 @@ y_train_cnn.value_counts(normalize = True)
 
     1    0.58
     0    0.42
-    dtype: float64
+    Name: proportion, dtype: float64
 
 
 
@@ -9364,7 +9368,7 @@ y_test.value_counts(normalize = True)
 
     0    0.755102
     1    0.244898
-    dtype: float64
+    Name: proportion, dtype: float64
 
 
 
@@ -9441,9 +9445,9 @@ hyperparameter_grid = {
 # Logistic Regression model
 ##################################
 downsampled_logistic_regression = GridSearchCV(estimator = logistic_regression, 
-                                           param_grid = hyperparameter_grid,
-                                           n_jobs = -1,
-                                           scoring='f1')
+                                               param_grid = hyperparameter_grid,
+                                               n_jobs = -1,
+                                               scoring='f1')
 
 ##################################
 # Fitting the downsampled Logistic Regression model
@@ -9647,7 +9651,7 @@ display(downsampled_logistic_regression_performance_test)
 #### 1.3.8.3 Decision Trees <a class="anchor" id="1.3.8.3"></a>
 
 1. The [decision tree model](https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html) from the <mark style="background-color: #CCECFF"><b>sklearn.tree</b></mark> Python library API was implemented. 
-2. The model contains 5 hyperparameters:
+2. The model contains 4 hyperparameters:
     * <span style="color: #FF0000">criterion</span> = function to measure the quality of a split made to vary between Gini, Entropy and Log-Loss
     * <span style="color: #FF0000">max_depth</span> = maximum depth of the tree made to vary between 3, 5 and 7
     * <span style="color: #FF0000">min_samples_leaf</span> = minimum number of samples required to split an internal node made to vary between 3, 5 and 10
@@ -9696,9 +9700,9 @@ hyperparameter_grid = {
 # Decision Tree model
 ##################################
 downsampled_decision_tree = GridSearchCV(estimator = decision_tree, 
-                                           param_grid = hyperparameter_grid,
-                                           n_jobs = -1,
-                                           scoring='f1')
+                                         param_grid = hyperparameter_grid,
+                                         n_jobs = -1,
+                                         scoring='f1')
 
 ##################################
 # Fitting the downsampled Decision Tree model
@@ -9901,7 +9905,7 @@ display(downsampled_decision_tree_performance_test)
 #### 1.3.8.4 Random Forest <a class="anchor" id="1.3.8.4"></a>
 
 1. The [random forest model](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#) from the <mark style="background-color: #CCECFF"><b>sklearn.ensemble</b></mark> Python library API was implemented. 
-2. The model contains 5 hyperparameters:
+2. The model contains 6 hyperparameters:
     * <span style="color: #FF0000">criterion</span> = function to measure the quality of a split made to vary between Gini, Entropy and Log-Loss
     * <span style="color: #FF0000">max_depth</span> = maximum depth of the tree made to vary between 3, 5 and 7
     * <span style="color: #FF0000">min_samples_leaf</span> = minimum number of samples required to split an internal node made to vary between 3, 5 and 10
@@ -9956,9 +9960,9 @@ hyperparameter_grid = {
 # Random Forest model
 ##################################
 downsampled_random_forest = GridSearchCV(estimator = random_forest, 
-                                           param_grid = hyperparameter_grid,
-                                           n_jobs = -1,
-                                           scoring='f1')
+                                         param_grid = hyperparameter_grid,
+                                         n_jobs = -1,
+                                         scoring='f1')
 
 ##################################
 # Fitting the downsampled Random Forest model
@@ -10163,7 +10167,7 @@ display(downsampled_random_forest_performance_test)
 #### 1.3.8.5 Support Vector Machine <a class="anchor" id="1.3.8.5"></a>
 
 1. The [support vector machine model](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html) from the <mark style="background-color: #CCECFF"><b>sklearn.svm</b></mark> Python library API was implemented. 
-2. The model contains 5 hyperparameters:
+2. The model contains 3 hyperparameters:
     * <span style="color: #FF0000">C</span> = inverse of regularization strength held constant at a value of 1
     * <span style="color: #FF0000">kernel</span> = kernel type to be used in the algorithm made to vary between Linear, Poly, RBF and Sigmoid
     * <span style="color: #FF0000">class_weight</span> = weights associated with classes held constant at a value of None
@@ -10209,9 +10213,9 @@ hyperparameter_grid = {
 # Support Vector Machine model
 ##################################
 downsampled_support_vector_machine = GridSearchCV(estimator = support_vector_machine, 
-                                           param_grid = hyperparameter_grid,
-                                           n_jobs = -1,
-                                           scoring='f1')
+                                                  param_grid = hyperparameter_grid,
+                                                  n_jobs = -1,
+                                                  scoring='f1')
 
 ##################################
 # Fitting the downsampled Support Vector Machine model
@@ -10867,7 +10871,7 @@ for container in logistic_regression_performance_comparison_F1_plot.containers:
 
 
     
-![png](output_300_0.png)
+![png](output_301_0.png)
     
 
 
@@ -10898,7 +10902,7 @@ plt.show()
 
 
     
-![png](output_301_0.png)
+![png](output_302_0.png)
     
 
 
@@ -11332,7 +11336,7 @@ for container in decision_tree_performance_comparison_F1_plot.containers:
 
 
     
-![png](output_305_0.png)
+![png](output_306_0.png)
     
 
 
@@ -11363,7 +11367,7 @@ plt.show()
 
 
     
-![png](output_306_0.png)
+![png](output_307_0.png)
     
 
 
@@ -11559,14 +11563,14 @@ display(random_forest_performance_comparison)
     <tr>
       <th>20</th>
       <td>Accuracy</td>
-      <td>0.991228</td>
+      <td>0.973684</td>
       <td>upsampled_random_forest</td>
       <td>train</td>
     </tr>
     <tr>
       <th>21</th>
       <td>Precision</td>
-      <td>0.966667</td>
+      <td>0.906250</td>
       <td>upsampled_random_forest</td>
       <td>train</td>
     </tr>
@@ -11580,49 +11584,49 @@ display(random_forest_performance_comparison)
     <tr>
       <th>23</th>
       <td>F1</td>
-      <td>0.983051</td>
+      <td>0.950820</td>
       <td>upsampled_random_forest</td>
       <td>train</td>
     </tr>
     <tr>
       <th>24</th>
       <td>AUROC</td>
-      <td>0.994118</td>
+      <td>0.982353</td>
       <td>upsampled_random_forest</td>
       <td>train</td>
     </tr>
     <tr>
       <th>25</th>
       <td>Accuracy</td>
-      <td>0.918367</td>
+      <td>0.897959</td>
       <td>upsampled_random_forest</td>
       <td>test</td>
     </tr>
     <tr>
       <th>26</th>
       <td>Precision</td>
-      <td>0.900000</td>
+      <td>0.888889</td>
       <td>upsampled_random_forest</td>
       <td>test</td>
     </tr>
     <tr>
       <th>27</th>
       <td>Recall</td>
-      <td>0.750000</td>
+      <td>0.666667</td>
       <td>upsampled_random_forest</td>
       <td>test</td>
     </tr>
     <tr>
       <th>28</th>
       <td>F1</td>
-      <td>0.818182</td>
+      <td>0.761905</td>
       <td>upsampled_random_forest</td>
       <td>test</td>
     </tr>
     <tr>
       <th>29</th>
       <td>AUROC</td>
-      <td>0.861486</td>
+      <td>0.819820</td>
       <td>upsampled_random_forest</td>
       <td>test</td>
     </tr>
@@ -11763,8 +11767,8 @@ random_forest_performance_comparison_F1_plot
     </tr>
     <tr>
       <th>upsampled_random_forest</th>
-      <td>0.983051</td>
-      <td>0.818182</td>
+      <td>0.950820</td>
+      <td>0.761905</td>
     </tr>
     <tr>
       <th>downsampled_random_forest</th>
@@ -11797,7 +11801,7 @@ for container in random_forest_performance_comparison_F1_plot.containers:
 
 
     
-![png](output_310_0.png)
+![png](output_311_0.png)
     
 
 
@@ -11828,7 +11832,7 @@ plt.show()
 
 
     
-![png](output_311_0.png)
+![png](output_312_0.png)
     
 
 
@@ -12031,28 +12035,28 @@ display(support_vector_machine_performance_comparison)
     <tr>
       <th>21</th>
       <td>Precision</td>
-      <td>0.906250</td>
+      <td>0.933333</td>
       <td>upsampled_support_vector_machine</td>
       <td>train</td>
     </tr>
     <tr>
       <th>22</th>
       <td>Recall</td>
-      <td>1.000000</td>
+      <td>0.965517</td>
       <td>upsampled_support_vector_machine</td>
       <td>train</td>
     </tr>
     <tr>
       <th>23</th>
       <td>F1</td>
-      <td>0.950820</td>
+      <td>0.949153</td>
       <td>upsampled_support_vector_machine</td>
       <td>train</td>
     </tr>
     <tr>
       <th>24</th>
       <td>AUROC</td>
-      <td>0.982353</td>
+      <td>0.970994</td>
       <td>upsampled_support_vector_machine</td>
       <td>train</td>
     </tr>
@@ -12228,7 +12232,7 @@ support_vector_machine_performance_comparison_F1_plot
     </tr>
     <tr>
       <th>upsampled_support_vector_machine</th>
-      <td>0.950820</td>
+      <td>0.949153</td>
       <td>0.782609</td>
     </tr>
     <tr>
@@ -12262,7 +12266,7 @@ for container in support_vector_machine_performance_comparison_F1_plot.container
 
 
     
-![png](output_315_0.png)
+![png](output_316_0.png)
     
 
 
@@ -12293,7 +12297,7 @@ plt.show()
 
 
     
-![png](output_316_0.png)
+![png](output_317_0.png)
     
 
 
@@ -12384,7 +12388,411 @@ stacked_logistic_regression.fit(X_train_smote, y_train_smote)
 
 
 
-<style>#sk-container-id-1 {color: black;background-color: white;}#sk-container-id-1 pre{padding: 0;}#sk-container-id-1 div.sk-toggleable {background-color: white;}#sk-container-id-1 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-1 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-1 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-1 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-1 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-1 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-1 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-1 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-1 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-1 div.sk-item {position: relative;z-index: 1;}#sk-container-id-1 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-1 div.sk-item::before, #sk-container-id-1 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-1 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-1 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-1 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-1 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-1 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-1 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-1 div.sk-label-container {text-align: center;}#sk-container-id-1 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-1 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>StackingClassifier(estimators=[(&#x27;LR&#x27;,
+<style>#sk-container-id-1 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-1 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-1 pre {
+  padding: 0;
+}
+
+#sk-container-id-1 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-1 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-1 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-1 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-1 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-1 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-1 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-1 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-1 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-1 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label label.sk-toggleable__label,
+#sk-container-id-1 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-1 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-1 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-1 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-1 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-1 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-1 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-1 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>StackingClassifier(estimators=[(&#x27;LR&#x27;,
                                 LogisticRegression(max_iter=500, penalty=&#x27;l1&#x27;,
                                                    random_state=88888888,
                                                    solver=&#x27;saga&#x27;)),
@@ -12401,7 +12809,7 @@ stacked_logistic_regression.fit(X_train_smote, y_train_smote)
                                (&#x27;SVM&#x27;,
                                 SVC(kernel=&#x27;linear&#x27;, random_state=88888888))],
                    final_estimator=LogisticRegression(max_iter=500,
-                                                      random_state=88888888))</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" ><label for="sk-estimator-id-1" class="sk-toggleable__label sk-toggleable__label-arrow">StackingClassifier</label><div class="sk-toggleable__content"><pre>StackingClassifier(estimators=[(&#x27;LR&#x27;,
+                                                      random_state=88888888))</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" ><label for="sk-estimator-id-1" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;StackingClassifier<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.ensemble.StackingClassifier.html">?<span>Documentation for StackingClassifier</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>StackingClassifier(estimators=[(&#x27;LR&#x27;,
                                 LogisticRegression(max_iter=500, penalty=&#x27;l1&#x27;,
                                                    random_state=88888888,
                                                    solver=&#x27;saga&#x27;)),
@@ -12418,10 +12826,10 @@ stacked_logistic_regression.fit(X_train_smote, y_train_smote)
                                (&#x27;SVM&#x27;,
                                 SVC(kernel=&#x27;linear&#x27;, random_state=88888888))],
                    final_estimator=LogisticRegression(max_iter=500,
-                                                      random_state=88888888))</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>LR</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox" ><label for="sk-estimator-id-2" class="sk-toggleable__label sk-toggleable__label-arrow">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(max_iter=500, penalty=&#x27;l1&#x27;, random_state=88888888,
-                   solver=&#x27;saga&#x27;)</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>DT</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-3" type="checkbox" ><label for="sk-estimator-id-3" class="sk-toggleable__label sk-toggleable__label-arrow">DecisionTreeClassifier</label><div class="sk-toggleable__content"><pre>DecisionTreeClassifier(criterion=&#x27;entropy&#x27;, max_depth=3, min_samples_leaf=5,
-                       random_state=88888888)</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>RF</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-4" type="checkbox" ><label for="sk-estimator-id-4" class="sk-toggleable__label sk-toggleable__label-arrow">RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(criterion=&#x27;entropy&#x27;, max_depth=7, min_samples_leaf=3,
-                       random_state=88888888)</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>SVM</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-5" type="checkbox" ><label for="sk-estimator-id-5" class="sk-toggleable__label sk-toggleable__label-arrow">SVC</label><div class="sk-toggleable__content"><pre>SVC(kernel=&#x27;linear&#x27;, random_state=88888888)</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>final_estimator</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-6" type="checkbox" ><label for="sk-estimator-id-6" class="sk-toggleable__label sk-toggleable__label-arrow">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(max_iter=500, random_state=88888888)</pre></div></div></div></div></div></div></div></div></div></div></div></div>
+                                                      random_state=88888888))</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><label>LR</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox" ><label for="sk-estimator-id-2" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;LogisticRegression<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.linear_model.LogisticRegression.html">?<span>Documentation for LogisticRegression</span></a></label><div class="sk-toggleable__content fitted"><pre>LogisticRegression(max_iter=500, penalty=&#x27;l1&#x27;, random_state=88888888,
+                   solver=&#x27;saga&#x27;)</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><label>DT</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-3" type="checkbox" ><label for="sk-estimator-id-3" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;DecisionTreeClassifier<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.tree.DecisionTreeClassifier.html">?<span>Documentation for DecisionTreeClassifier</span></a></label><div class="sk-toggleable__content fitted"><pre>DecisionTreeClassifier(criterion=&#x27;entropy&#x27;, max_depth=3, min_samples_leaf=5,
+                       random_state=88888888)</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><label>RF</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-4" type="checkbox" ><label for="sk-estimator-id-4" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;RandomForestClassifier<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.ensemble.RandomForestClassifier.html">?<span>Documentation for RandomForestClassifier</span></a></label><div class="sk-toggleable__content fitted"><pre>RandomForestClassifier(criterion=&#x27;entropy&#x27;, max_depth=7, min_samples_leaf=3,
+                       random_state=88888888)</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><label>SVM</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-5" type="checkbox" ><label for="sk-estimator-id-5" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;SVC<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.svm.SVC.html">?<span>Documentation for SVC</span></a></label><div class="sk-toggleable__content fitted"><pre>SVC(kernel=&#x27;linear&#x27;, random_state=88888888)</pre></div> </div></div></div></div></div></div></div><div class="sk-item"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><label>final_estimator</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-6" type="checkbox" ><label for="sk-estimator-id-6" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;LogisticRegression<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.linear_model.LogisticRegression.html">?<span>Documentation for LogisticRegression</span></a></label><div class="sk-toggleable__content fitted"><pre>LogisticRegression(max_iter=500, random_state=88888888)</pre></div> </div></div></div></div></div></div></div></div></div></div></div>
 
 
 
@@ -12485,28 +12893,28 @@ display(stacked_logistic_regression_performance_train)
     <tr>
       <th>1</th>
       <td>Precision</td>
-      <td>0.906250</td>
+      <td>0.933333</td>
       <td>stacked_logistic_regression</td>
       <td>train</td>
     </tr>
     <tr>
       <th>2</th>
       <td>Recall</td>
-      <td>1.000000</td>
+      <td>0.965517</td>
       <td>stacked_logistic_regression</td>
       <td>train</td>
     </tr>
     <tr>
       <th>3</th>
       <td>F1</td>
-      <td>0.950820</td>
+      <td>0.949153</td>
       <td>stacked_logistic_regression</td>
       <td>train</td>
     </tr>
     <tr>
       <th>4</th>
       <td>AUROC</td>
-      <td>0.982353</td>
+      <td>0.970994</td>
       <td>stacked_logistic_regression</td>
       <td>train</td>
     </tr>
@@ -12911,14 +13319,14 @@ display(base_meta_learner_performance_comparison)
     <tr>
       <th>30</th>
       <td>Accuracy</td>
-      <td>0.991228</td>
+      <td>0.973684</td>
       <td>upsampled_random_forest</td>
       <td>train</td>
     </tr>
     <tr>
       <th>31</th>
       <td>Precision</td>
-      <td>0.966667</td>
+      <td>0.906250</td>
       <td>upsampled_random_forest</td>
       <td>train</td>
     </tr>
@@ -12932,49 +13340,49 @@ display(base_meta_learner_performance_comparison)
     <tr>
       <th>33</th>
       <td>F1</td>
-      <td>0.983051</td>
+      <td>0.950820</td>
       <td>upsampled_random_forest</td>
       <td>train</td>
     </tr>
     <tr>
       <th>34</th>
       <td>AUROC</td>
-      <td>0.994118</td>
+      <td>0.982353</td>
       <td>upsampled_random_forest</td>
       <td>train</td>
     </tr>
     <tr>
       <th>35</th>
       <td>Accuracy</td>
-      <td>0.918367</td>
+      <td>0.897959</td>
       <td>upsampled_random_forest</td>
       <td>test</td>
     </tr>
     <tr>
       <th>36</th>
       <td>Precision</td>
-      <td>0.900000</td>
+      <td>0.888889</td>
       <td>upsampled_random_forest</td>
       <td>test</td>
     </tr>
     <tr>
       <th>37</th>
       <td>Recall</td>
-      <td>0.750000</td>
+      <td>0.666667</td>
       <td>upsampled_random_forest</td>
       <td>test</td>
     </tr>
     <tr>
       <th>38</th>
       <td>F1</td>
-      <td>0.818182</td>
+      <td>0.761905</td>
       <td>upsampled_random_forest</td>
       <td>test</td>
     </tr>
     <tr>
       <th>39</th>
       <td>AUROC</td>
-      <td>0.861486</td>
+      <td>0.819820</td>
       <td>upsampled_random_forest</td>
       <td>test</td>
     </tr>
@@ -12988,28 +13396,28 @@ display(base_meta_learner_performance_comparison)
     <tr>
       <th>41</th>
       <td>Precision</td>
-      <td>0.906250</td>
+      <td>0.933333</td>
       <td>upsampled_support_vector_machine</td>
       <td>train</td>
     </tr>
     <tr>
       <th>42</th>
       <td>Recall</td>
-      <td>1.000000</td>
+      <td>0.965517</td>
       <td>upsampled_support_vector_machine</td>
       <td>train</td>
     </tr>
     <tr>
       <th>43</th>
       <td>F1</td>
-      <td>0.950820</td>
+      <td>0.949153</td>
       <td>upsampled_support_vector_machine</td>
       <td>train</td>
     </tr>
     <tr>
       <th>44</th>
       <td>AUROC</td>
-      <td>0.982353</td>
+      <td>0.970994</td>
       <td>upsampled_support_vector_machine</td>
       <td>train</td>
     </tr>
@@ -13058,28 +13466,28 @@ display(base_meta_learner_performance_comparison)
     <tr>
       <th>51</th>
       <td>Precision</td>
-      <td>0.906250</td>
+      <td>0.933333</td>
       <td>stacked_logistic_regression</td>
       <td>train</td>
     </tr>
     <tr>
       <th>52</th>
       <td>Recall</td>
-      <td>1.000000</td>
+      <td>0.965517</td>
       <td>stacked_logistic_regression</td>
       <td>train</td>
     </tr>
     <tr>
       <th>53</th>
       <td>F1</td>
-      <td>0.950820</td>
+      <td>0.949153</td>
       <td>stacked_logistic_regression</td>
       <td>train</td>
     </tr>
     <tr>
       <th>54</th>
       <td>AUROC</td>
-      <td>0.982353</td>
+      <td>0.970994</td>
       <td>stacked_logistic_regression</td>
       <td>train</td>
     </tr>
@@ -13190,17 +13598,17 @@ base_meta_learner_performance_comparison_F1_plot
     </tr>
     <tr>
       <th>upsampled_random_forest</th>
-      <td>0.983051</td>
-      <td>0.818182</td>
+      <td>0.950820</td>
+      <td>0.761905</td>
     </tr>
     <tr>
       <th>upsampled_support_vector_machine</th>
-      <td>0.950820</td>
+      <td>0.949153</td>
       <td>0.782609</td>
     </tr>
     <tr>
       <th>stacked_logistic_regression</th>
-      <td>0.950820</td>
+      <td>0.949153</td>
       <td>0.818182</td>
     </tr>
   </tbody>
@@ -13229,7 +13637,7 @@ for container in base_meta_learner_performance_comparison_F1_plot.containers:
 
 
     
-![png](output_331_0.png)
+![png](output_332_0.png)
     
 
 
@@ -13317,11 +13725,11 @@ base_meta_learner_performance_comparison_all_plot
     </tr>
     <tr>
       <th>upsampled_random_forest</th>
-      <td>0.918367</td>
-      <td>0.900000</td>
-      <td>0.750000</td>
-      <td>0.818182</td>
-      <td>0.861486</td>
+      <td>0.897959</td>
+      <td>0.888889</td>
+      <td>0.666667</td>
+      <td>0.761905</td>
+      <td>0.819820</td>
     </tr>
     <tr>
       <th>upsampled_support_vector_machine</th>
@@ -13365,7 +13773,7 @@ for container in base_meta_learner_performance_comparison_all_plot.containers:
 
 
     
-![png](output_334_0.png)
+![png](output_335_0.png)
     
 
 
@@ -13399,7 +13807,7 @@ plt.show()
 
 
     
-![png](output_335_0.png)
+![png](output_336_0.png)
     
 
 
@@ -13437,9 +13845,413 @@ final_model.fit(X_train, y_train)
 
 
 
-<style>#sk-container-id-2 {color: black;background-color: white;}#sk-container-id-2 pre{padding: 0;}#sk-container-id-2 div.sk-toggleable {background-color: white;}#sk-container-id-2 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-2 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-2 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-2 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-2 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-2 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-2 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-2 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-2 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-2 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-2 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-2 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-2 div.sk-item {position: relative;z-index: 1;}#sk-container-id-2 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-2 div.sk-item::before, #sk-container-id-2 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-2 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-2 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-2 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-2 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-2 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-2 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-2 div.sk-label-container {text-align: center;}#sk-container-id-2 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-2 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>LogisticRegression(class_weight={0: 0.25, 1: 0.75}, max_iter=500,
-                   random_state=88888888, solver=&#x27;liblinear&#x27;)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-7" type="checkbox" checked><label for="sk-estimator-id-7" class="sk-toggleable__label sk-toggleable__label-arrow">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(class_weight={0: 0.25, 1: 0.75}, max_iter=500,
-                   random_state=88888888, solver=&#x27;liblinear&#x27;)</pre></div></div></div></div></div>
+<style>#sk-container-id-2 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-2 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-2 pre {
+  padding: 0;
+}
+
+#sk-container-id-2 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-2 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-2 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-2 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-2 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-2 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-2 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-2 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-2 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-2 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-2 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-2 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-2 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-2 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-2 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-2 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-2 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-2 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-2 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-2 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-2 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-2 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-2 div.sk-label label.sk-toggleable__label,
+#sk-container-id-2 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-2 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-2 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-2 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-2 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-2 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-2 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-2 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-2 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-2 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-2 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-2 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-2 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>LogisticRegression(class_weight={0: 0.25, 1: 0.75}, max_iter=500,
+                   random_state=88888888, solver=&#x27;liblinear&#x27;)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-7" type="checkbox" checked><label for="sk-estimator-id-7" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;LogisticRegression<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.linear_model.LogisticRegression.html">?<span>Documentation for LogisticRegression</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>LogisticRegression(class_weight={0: 0.25, 1: 0.75}, max_iter=500,
+                   random_state=88888888, solver=&#x27;liblinear&#x27;)</pre></div> </div></div></div></div>
 
 
 
@@ -13590,7 +14402,7 @@ plt.show()
 
 
     
-![png](output_344_0.png)
+![png](output_345_0.png)
     
 
 
@@ -13608,9 +14420,18 @@ plt.show()
 
 
     
-![png](output_345_0.png)
+![png](output_346_0.png)
     
 
+
+
+```python
+##################################
+# Converting the SHAP values 
+# to float data types
+##################################
+final_model_train_shap_values.values = final_model_train_shap_values.values.astype(float)
+```
 
 
 ```python
@@ -13620,16 +14441,26 @@ plt.show()
 # to estimate the feature impact
 # on model predictions
 ##################################
-shap.plots.beeswarm(final_model_train_shap_values, show=False, plot_size=(10, 6))
+shap.plots.beeswarm(final_model_train_shap_values, show=False)
+plt.gcf().set_size_inches(10, 6)
 plt.xlim([-3, 3])
 plt.show()
 ```
 
 
     
-![png](output_346_0.png)
+![png](output_348_0.png)
     
 
+
+
+```python
+##################################
+# Converting the SHAP values 
+# to float data types
+##################################
+final_model_test_shap_values.values = final_model_test_shap_values.values.astype(float)
+```
 
 
 ```python
@@ -13646,7 +14477,7 @@ plt.show()
 
 
     
-![png](output_347_0.png)
+![png](output_350_0.png)
     
 
 
@@ -13663,8 +14494,15 @@ shap.plots.heatmap(final_model_train_shap_values)
 
 
     
-![png](output_348_0.png)
+![png](output_351_0.png)
     
+
+
+
+
+
+    <Axes: xlabel='Instances'>
+
 
 
 
@@ -13680,8 +14518,15 @@ shap.plots.heatmap(final_model_test_shap_values)
 
 
     
-![png](output_349_0.png)
+![png](output_352_0.png)
     
+
+
+
+
+
+    <Axes: xlabel='Instances'>
+
 
 
 
@@ -13697,46 +14542,19 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_tra
 
 
     
-![png](output_350_0.png)
-    
-
-
-
-```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="DTHCMD")
-```
-
-
-    
-![png](output_351_0.png)
-    
-
-
-
-```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="LIFEXP")
-```
-
-
-    
-![png](output_352_0.png)
-    
-
-
-
-```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="TUBINC")
-```
-
-
-    
 ![png](output_353_0.png)
     
 
 
 
 ```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="CO2EMI")
+##################################
+# Formulating the dependence plot
+# of the SHAP values using the train set
+# for the most important feature
+# as evaluated to the rest of the features
+##################################
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="DTHCMD")
 ```
 
 
@@ -13747,7 +14565,13 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_tra
 
 
 ```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="HDICAT_VH")
+##################################
+# Formulating the dependence plot
+# of the SHAP values using the train set
+# for the most important feature
+# as evaluated to the rest of the features
+##################################
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="LIFEXP")
 ```
 
 
@@ -13758,12 +14582,69 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_tra
 
 
 ```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="URBPOP")
+##################################
+# Formulating the dependence plot
+# of the SHAP values using the train set
+# for the most important feature
+# as evaluated to the rest of the features
+##################################
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="TUBINC")
 ```
 
 
     
 ![png](output_356_0.png)
+    
+
+
+
+```python
+##################################
+# Formulating the dependence plot
+# of the SHAP values using the train set
+# for the most important feature
+# as evaluated to the rest of the features
+##################################
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="CO2EMI")
+```
+
+
+    
+![png](output_357_0.png)
+    
+
+
+
+```python
+##################################
+# Formulating the dependence plot
+# of the SHAP values using the train set
+# for the most important feature
+# as evaluated to the rest of the features
+##################################
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="HDICAT_VH")
+```
+
+
+    
+![png](output_358_0.png)
+    
+
+
+
+```python
+##################################
+# Formulating the dependence plot
+# of the SHAP values using the train set
+# for the most important feature
+# as evaluated to the rest of the features
+##################################
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_train), X_train, interaction_index="URBPOP")
+```
+
+
+    
+![png](output_359_0.png)
     
 
 
@@ -13780,46 +14661,19 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 
 
     
-![png](output_357_0.png)
-    
-
-
-
-```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="DTHCMD")
-```
-
-
-    
-![png](output_358_0.png)
-    
-
-
-
-```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="LIFEXP")
-```
-
-
-    
-![png](output_359_0.png)
-    
-
-
-
-```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="TUBINC")
-```
-
-
-    
 ![png](output_360_0.png)
     
 
 
 
 ```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="CO2EMI")
+##################################
+# Formulating the dependence plot
+# of the SHAP values using the test set
+# for the most important feature
+# as evaluated to the rest of the features
+##################################
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="DTHCMD")
 ```
 
 
@@ -13830,7 +14684,13 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 
 
 ```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="HDICAT_VH")
+##################################
+# Formulating the dependence plot
+# of the SHAP values using the test set
+# for the most important feature
+# as evaluated to the rest of the features
+##################################
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="LIFEXP")
 ```
 
 
@@ -13841,12 +14701,69 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 
 
 ```python
-shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="URBPOP")
+##################################
+# Formulating the dependence plot
+# of the SHAP values using the test set
+# for the most important feature
+# as evaluated to the rest of the features
+##################################
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="TUBINC")
 ```
 
 
     
 ![png](output_363_0.png)
+    
+
+
+
+```python
+##################################
+# Formulating the dependence plot
+# of the SHAP values using the test set
+# for the most important feature
+# as evaluated to the rest of the features
+##################################
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="CO2EMI")
+```
+
+
+    
+![png](output_364_0.png)
+    
+
+
+
+```python
+##################################
+# Formulating the dependence plot
+# of the SHAP values using the test set
+# for the most important feature
+# as evaluated to the rest of the features
+##################################
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="HDICAT_VH")
+```
+
+
+    
+![png](output_365_0.png)
+    
+
+
+
+```python
+##################################
+# Formulating the dependence plot
+# of the SHAP values using the test set
+# for the most important feature
+# as evaluated to the rest of the features
+##################################
+shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test, interaction_index="URBPOP")
+```
+
+
+    
+![png](output_366_0.png)
     
 
 
@@ -13880,17 +14797,19 @@ shap.dependence_plot('EPISCO', final_model_explainer.shap_values(X_test), X_test
 * Exploring other oversampling (Adasyn, Borderline SMOTE, K-Means SMOTE) and undersampling (NearMiss, Tomek Links, ENN) techniques to address class imbalance
 * Experimenting with combining resampling techniques with algorithmic approaches that handle class imbalance internally including bagging and boosting ensembles
 
-![CaseStudy3_Summary_1.png](attachment:9d480dcb-fb68-4c51-ad77-b5f39e00c0c4.png)
+![CaseStudy3_Summary_0.png](8be27a7e-13f9-47f5-a185-a0f17e7b7fec.png)
 
-![CaseStudy3_Summary_2.png](attachment:75746d59-8b08-45fd-a9f9-afb4051430c1.png)
+![CaseStudy3_Summary_1.png](1724b81e-c428-4eef-870a-0f8193522447.png)
 
-![CaseStudy3_Summary_3.png](attachment:5037323b-9031-4187-a481-dbd1ab2aea2d.png)
+![CaseStudy3_Summary_2.png](536f15f6-baff-41f1-9726-346a82e64f5c.png)
 
-![CaseStudy3_Summary_4.png](attachment:c2627d22-2354-4c5a-a5a3-80abb967a404.png)
+![CaseStudy3_Summary_3.png](7bd2bc36-632e-407c-84ea-f1ad3c208b35.png)
 
-![CaseStudy3_Summary_5.png](attachment:aa215b7d-001e-4a03-8de3-c13d7fca8363.png)
+![CaseStudy3_Summary_4.png](5c808b51-c415-435e-9edb-b70f491fab54.png)
 
-![CaseStudy3_Summary_6.png](attachment:6aaf1c22-d2eb-4a60-b869-881e5d4e8674.png)
+![CaseStudy3_Summary_5.png](3cab780f-54e1-447f-9cd0-bc2c8f0ffb03.png)
+
+![CaseStudy3_Summary_6.png](9137d710-7cfa-41aa-b520-c8af99a6f8d6.png)
 
 # 3. References <a class="anchor" id="References"></a>
 
