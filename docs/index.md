@@ -5922,7 +5922,7 @@ display(optimal_logistic_regression_performance_test)
 #### 1.3.5.3 Decision Trees <a class="anchor" id="1.3.5.3"></a>
 
 1. The [decision tree model](https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html) from the <mark style="background-color: #CCECFF"><b>sklearn.tree</b></mark> Python library API was implemented. 
-2. The model contains 5 hyperparameters:
+2. The model contains 4 hyperparameters:
     * <span style="color: #FF0000">criterion</span> = function to measure the quality of a split made to vary between Gini, Entropy and Log-Loss
     * <span style="color: #FF0000">max_depth</span> = maximum depth of the tree made to vary between 3, 5 and 7
     * <span style="color: #FF0000">min_samples_leaf</span> = minimum number of samples required to split an internal node made to vary between 3, 5 and 10
@@ -6176,7 +6176,7 @@ display(optimal_decision_tree_performance_test)
 #### 1.3.5.4 Random Forest <a class="anchor" id="1.3.5.4"></a>
 
 1. The [random forest model](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#) from the <mark style="background-color: #CCECFF"><b>sklearn.ensemble</b></mark> Python library API was implemented. 
-2. The model contains 5 hyperparameters:
+2. The model contains 6 hyperparameters:
     * <span style="color: #FF0000">criterion</span> = function to measure the quality of a split made to vary between Gini, Entropy and Log-Loss
     * <span style="color: #FF0000">max_depth</span> = maximum depth of the tree made to vary between 3, 5 and 7
     * <span style="color: #FF0000">min_samples_leaf</span> = minimum number of samples required to split an internal node made to vary between 3, 5 and 10
@@ -6189,7 +6189,7 @@ display(optimal_decision_tree_performance_test)
     * <span style="color: #FF0000">max_depth</span> = 3
     * <span style="color: #FF0000">min_samples_leaf</span> = 3
     * <span style="color: #FF0000">n_estimators</span> = 100
-    * <span style="color: #FF0000">max_features</span> = Sqrt n_estimators
+    * <span style="color: #FF0000">max_features</span> = Sqrt of n_estimators
     * <span style="color: #FF0000">class_weight</span> = None
 5. The apparent model performance of the optimal model is summarized as follows:
     * **Accuracy** = 0.9561
@@ -6438,7 +6438,7 @@ display(optimal_random_forest_performance_test)
 #### 1.3.5.5 Support Vector Machine <a class="anchor" id="1.3.5.5"></a>
 
 1. The [support vector machine model](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html) from the <mark style="background-color: #CCECFF"><b>sklearn.svm</b></mark> Python library API was implemented. 
-2. The model contains 5 hyperparameters:
+2. The model contains 3 hyperparameters:
     * <span style="color: #FF0000">C</span> = inverse of regularization strength held constant at a value of 1
     * <span style="color: #FF0000">kernel</span> = kernel type to be used in the algorithm made to vary between Linear, Poly, RBF and Sigmoid
     * <span style="color: #FF0000">class_weight</span> = weights associated with classes held constant at a value of None
@@ -7134,7 +7134,7 @@ display(weighted_logistic_regression_performance_test)
 #### 1.3.6.3 Decision Trees <a class="anchor" id="1.3.6.3"></a>
 
 1. The [decision tree model](https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html) from the <mark style="background-color: #CCECFF"><b>sklearn.tree</b></mark> Python library API was implemented. 
-2. The model contains 5 hyperparameters:
+2. The model contains 4 hyperparameters:
     * <span style="color: #FF0000">criterion</span> = function to measure the quality of a split made to vary between Gini, Entropy and Log-Loss
     * <span style="color: #FF0000">max_depth</span> = maximum depth of the tree made to vary between 3, 5 and 7
     * <span style="color: #FF0000">min_samples_leaf</span> = minimum number of samples required to split an internal node made to vary between 3, 5 and 10
@@ -7388,7 +7388,7 @@ display(weighted_decision_tree_performance_test)
 #### 1.3.6.4 Random Forest <a class="anchor" id="1.3.6.4"></a>
 
 1. The [random forest model](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#) from the <mark style="background-color: #CCECFF"><b>sklearn.ensemble</b></mark> Python library API was implemented. 
-2. The model contains 5 hyperparameters:
+2. The model contains 6 hyperparameters:
     * <span style="color: #FF0000">criterion</span> = function to measure the quality of a split made to vary between Gini, Entropy and Log-Loss
     * <span style="color: #FF0000">max_depth</span> = maximum depth of the tree made to vary between 3, 5 and 7
     * <span style="color: #FF0000">min_samples_leaf</span> = minimum number of samples required to split an internal node made to vary between 3, 5 and 10
@@ -7401,7 +7401,7 @@ display(weighted_decision_tree_performance_test)
     * <span style="color: #FF0000">max_depth</span> = 5
     * <span style="color: #FF0000">min_samples_leaf</span> = 3
     * <span style="color: #FF0000">n_estimators</span> = 100
-    * <span style="color: #FF0000">max_features</span> = Sqrt n_estimators
+    * <span style="color: #FF0000">max_features</span> = Sqrt of n_estimators
     * <span style="color: #FF0000">class_weight</span> = 25-75 between classes 0 and 1
 5. The apparent model performance of the optimal model is summarized as follows:
     * **Accuracy** = 0.9736
@@ -7650,7 +7650,7 @@ display(weighted_random_forest_performance_test)
 #### 1.3.6.5 Support Vector Machine <a class="anchor" id="1.3.6.5"></a>
 
 1. The [support vector machine model](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html) from the <mark style="background-color: #CCECFF"><b>sklearn.svm</b></mark> Python library API was implemented. 
-2. The model contains 5 hyperparameters:
+2. The model contains 3 hyperparameters:
     * <span style="color: #FF0000">C</span> = inverse of regularization strength held constant at a value of 1
     * <span style="color: #FF0000">kernel</span> = kernel type to be used in the algorithm made to vary between Linear, Poly, RBF and Sigmoid
     * <span style="color: #FF0000">class_weight</span> = weights associated with classes held constant at a value of 25-75 between classes 0 and 1
@@ -8394,7 +8394,7 @@ display(upsampled_logistic_regression_performance_test)
 #### 1.3.7.3 Decision Trees <a class="anchor" id="1.3.7.3"></a>
 
 1. The [decision tree model](https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html) from the <mark style="background-color: #CCECFF"><b>sklearn.tree</b></mark> Python library API was implemented. 
-2. The model contains 5 hyperparameters:
+2. The model contains 4 hyperparameters:
     * <span style="color: #FF0000">criterion</span> = function to measure the quality of a split made to vary between Gini, Entropy and Log-Loss
     * <span style="color: #FF0000">max_depth</span> = maximum depth of the tree made to vary between 3, 5 and 7
     * <span style="color: #FF0000">min_samples_leaf</span> = minimum number of samples required to split an internal node made to vary between 3, 5 and 10
@@ -8648,7 +8648,7 @@ display(upsampled_decision_tree_performance_test)
 #### 1.3.7.4 Random Forest <a class="anchor" id="1.3.7.4"></a>
 
 1. The [random forest model](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#) from the <mark style="background-color: #CCECFF"><b>sklearn.ensemble</b></mark> Python library API was implemented. 
-2. The model contains 5 hyperparameters:
+2. The model contains 6 hyperparameters:
     * <span style="color: #FF0000">criterion</span> = function to measure the quality of a split made to vary between Gini, Entropy and Log-Loss
     * <span style="color: #FF0000">max_depth</span> = maximum depth of the tree made to vary between 3, 5 and 7
     * <span style="color: #FF0000">min_samples_leaf</span> = minimum number of samples required to split an internal node made to vary between 3, 5 and 10
@@ -8661,7 +8661,7 @@ display(upsampled_decision_tree_performance_test)
     * <span style="color: #FF0000">max_depth</span> = 7
     * <span style="color: #FF0000">min_samples_leaf</span> = 3
     * <span style="color: #FF0000">n_estimators</span> = 100
-    * <span style="color: #FF0000">max_features</span> = Sqrt n_estimators
+    * <span style="color: #FF0000">max_features</span> = Sqrt of n_estimators
     * <span style="color: #FF0000">class_weight</span> = None
 5. The apparent model performance of the optimal model is summarized as follows:
     * **Accuracy** = 0.9912
@@ -8910,7 +8910,7 @@ display(upsampled_random_forest_performance_test)
 #### 1.3.7.5 Support Vector Machine <a class="anchor" id="1.3.7.5"></a>
 
 1. The [support vector machine model](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html) from the <mark style="background-color: #CCECFF"><b>sklearn.svm</b></mark> Python library API was implemented. 
-2. The model contains 5 hyperparameters:
+2. The model contains 3 hyperparameters:
     * <span style="color: #FF0000">C</span> = inverse of regularization strength held constant at a value of 1
     * <span style="color: #FF0000">kernel</span> = kernel type to be used in the algorithm made to vary between Linear, Poly, RBF and Sigmoid
     * <span style="color: #FF0000">class_weight</span> = weights associated with classes held constant at a value of None
@@ -9918,7 +9918,7 @@ display(downsampled_decision_tree_performance_test)
     * <span style="color: #FF0000">max_depth</span> = 3
     * <span style="color: #FF0000">min_samples_leaf</span> = 3
     * <span style="color: #FF0000">n_estimators</span> = 100
-    * <span style="color: #FF0000">max_features</span> = Sqrt n_estimators
+    * <span style="color: #FF0000">max_features</span> = Sqrt of n_estimators
     * <span style="color: #FF0000">class_weight</span> = None
 5. The apparent model performance of the optimal model is summarized as follows:
     * **Accuracy** = 0.9649
